@@ -5,7 +5,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import StartScreen from '../pages/startScreen/StartScreen';
 import LoginScreen from '../pages/loginScreen/LoginScreen';
 import CadastroScreen from '../pages/cadastroScreen/CadastroScreen'
-import LoginAnalizer from '../../LoginAnalizer';
 
 const Stack=createStackNavigator();
 
@@ -15,7 +14,6 @@ const Routes = ()=> {
         <Stack.Screen component={StartScreen} name='StartScreen'/>
         <Stack.Screen component={LoginScreen} name='LoginScreen'/>
         <Stack.Screen component={CadastroScreen} name='CadastroScreen' />
-        <Stack.Screen component={LoginAnalizer} name='LoginAnalizer' />
     </Stack.Navigator>
   );
 }

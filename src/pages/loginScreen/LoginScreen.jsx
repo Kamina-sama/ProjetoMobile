@@ -1,35 +1,50 @@
 import 'react-native-gesture-handler';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button, Alert, TextInput } from 'react-native';
-import {FloatingLabelInput} from 'react-native-floating-label-input';
+import { StyleSheet, Text, View } from 'react-native';
+import { CustomInput } from '../../components/Input';
+import { PrimaryButton } from '../../components/PrimaryButton';
 
 const LoginScreen = (props)=> {
-  const [email, setEmail]=useState('');
-  const [senha, setSenha]=useState('');
-
-  function analizeLogin() {
-  
-  }
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
-    <View>
-        <TextInput textContentType='emailAddress' value={email} onChangeText={setEmail}  placeholder='email@host.com'/>
-        <FloatingLabelInput 
-          label={'Senha'} 
-          textContentType='password' 
-          isPassword 
-          togglePassword={false} 
-          value={senha} 
-          onChangeText={setSenha}
+    <View style={styles.container}>
+        <Text style={styles.title}>Informe suas credenciais para entrar</Text>
+        <Text style={styles.label}>Email</Text>
+        <CustomInput 
+          onChange={input => setEmail(input)}
+          value={email}
         />
-        <Button title='Login' onPress={analizeLogin}/>
-        <Text>Não possui uma conta? <Text style={styles.link} onPress={()=>props.navigation.navigate('CadastroScreen')}>cadastre-se</Text></Text>
+        <Text style={styles.label}>Senha</Text>
+        <CustomInput 
+          onChange={input => setPassword(input)}
+          value={password}
+        />
+        <PrimaryButton onPress={console.log(email,password)}>Entrar</PrimaryButton>
     </View>
   );
 }
 export default LoginScreen;
 
-const styles=StyleSheet.create({
-  link:{color:'blue'}
-}
-);
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingLeft: 20,
+    paddingRight: 20
+  },
+  title: {
+    fontSize: 25,
+    fontWeight: "bold",
+    marginBottom: 32
+  },
+  label: {
+    fontSize: 20,
+    fontWeight: "bold",
+    justifyContent: "flex-start",
+    marginBottom: 8,
+    width: 300
+  }
+});
