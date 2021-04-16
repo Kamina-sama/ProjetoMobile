@@ -1,14 +1,11 @@
 import 'react-native-gesture-handler';
-import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button, Alert } from 'react-native';
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import CreateBookScreen from './CreateBook';
-import StartScreen from './StartScreen';
-import LoginScreen from './LoginScreen';
-import CadastroScreen from './CadastroScreen'
-import LoginAnalizer from './LoginAnalizer';
+import StartScreen from '../pages/startScreen/StartScreen';
+import LoginScreen from '../pages/loginScreen/LoginScreen';
+import CadastroScreen from '../pages/cadastroScreen/CadastroScreen'
+import LoginAnalizer from '../../LoginAnalizer';
 
 const Stack=createStackNavigator();
 

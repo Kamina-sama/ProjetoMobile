@@ -1,9 +1,7 @@
 import 'react-native-gesture-handler';
-import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Button, Alert, TextInput } from 'react-native';
 import {FloatingLabelInput} from 'react-native-floating-label-input';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = (props)=> {
   const [email, setEmail]=useState('');

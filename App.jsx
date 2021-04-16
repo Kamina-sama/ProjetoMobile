@@ -1,10 +1,7 @@
 import 'react-native-gesture-handler';
-import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button, Alert } from 'react-native';
-import CreateBookScreen from './CreateBook';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import Routes from './Routes';
+import Routes from './src/routes/Routes';
 
 const App = ()=> {
   return (
@@ -14,12 +11,3 @@ const App = ()=> {
   );
 }
 export default App;
-//<CreateBookScreen autor={this.state.usuario} onSubmit={this.handleSubmit}/>
-/*const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});*/
