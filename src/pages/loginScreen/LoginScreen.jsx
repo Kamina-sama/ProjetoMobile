@@ -21,7 +21,9 @@ const LoginScreen = (props)=> {
           onChange={input => setPassword(input)}
           value={password}
         />
-        <PrimaryButton onPress={console.log(email,password)}>Entrar</PrimaryButton>
+        <PrimaryButton 
+          onPress={()=>props.navigation.navigate('BookStore')}
+        >Entrar</PrimaryButton>
     </View>
   );
 }

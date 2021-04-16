@@ -21,7 +21,9 @@ const CadastroScreen = (props)=> {
           onChange={input => setPassword(input)}
           value={password}
         />
-        <PrimaryButton onPress={console.log(email,password)}>Cadastrar</PrimaryButton>
+        <PrimaryButton 
+          onPress={()=>props.navigation.navigate('BookStore')}
+        >Cadastrar</PrimaryButton>
     </View>
   );
 }
