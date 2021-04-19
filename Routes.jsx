@@ -9,6 +9,7 @@ import StartScreen from './StartScreen';
 import LoginScreen from './LoginScreen';
 import CadastroScreen from './CadastroScreen'
 import LoginAnalizer from './LoginAnalizer';
+import CreateEditora from './components//editora/CreateEditora'
 
 const Stack=createStackNavigator();
 
@@ -19,6 +20,7 @@ const Routes = ()=> {
         <Stack.Screen component={LoginScreen} name='LoginScreen'/>
         <Stack.Screen component={CadastroScreen} name='CadastroScreen' />
         <Stack.Screen component={LoginAnalizer} name='LoginAnalizer' />
+        <Stack.Screen component={CreateEditora} name='CreateEditora' />
     </Stack.Navigator>
   );
 }
