@@ -11,6 +11,7 @@ const StartScreen = (props)=> {
         <Button title='Login' onPress={()=>props.navigation.navigate('LoginScreen')}/>
         <Button title='Cadastro' onPress={()=>props.navigation.navigate('CadastroScreen')} />
         <Button title='Cadastro de editora' onPress={()=>props.navigation.navigate('CreateEditora')} />
+        <Button title='Cadastro de Autor' onPress={()=>props.navigation.navigate('CreateAutor')} />
     </View>
   );
 }
