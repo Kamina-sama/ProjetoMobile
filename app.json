@@ -1,13 +1,13 @@
 {
-  "name": "Test",
-  "displayName": "Test",
+  "name": "teste",
+  "displayName": "teste",
   "expo": {
-    "name": "Test",
-    "slug": "Test",
+    "name": "teste",
+    "slug": "teste",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "android":{"softwareKeyboardLayoutMode":"pan"}
   }
-
 }
