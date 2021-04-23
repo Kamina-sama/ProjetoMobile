@@ -39,6 +39,22 @@ class EditoraStorage{
             return error;
         }
     }
+
+    removeItem = async (key) => {
+        try {
+            await AsyncStorage.removeItem(key);
+        } catch (error) {
+            return error;
+        }
+    }
+
+    multiRemove = async (keys) => {
+        try {
+            await AsyncStorage.multiRemove(keys);
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export default EditoraStorage;

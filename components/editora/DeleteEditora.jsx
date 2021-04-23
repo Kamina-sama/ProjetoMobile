@@ -13,7 +13,7 @@ const DeleteEditora = (props) => {
     const { isOpen, closeModal, selectedEditora } = props;
 
     const deleteEditora = () => {
-      props.deleteEditora(props.selectedEditora.name);
+      props.deleteEditora(props.selectedEditora.cnpj);
       props.closeModal();
     }
 
@@ -25,10 +25,9 @@ const DeleteEditora = (props) => {
             transparent
         >
             <View style={styles.BackgroundContainer}>
-                <View style={styles.container}>
-                    <Text style={styles.title}>Deseja excluir esse editora? ({selectedEditora.name})?</Text>
-                    <Text style={styles.subTitle}>Se deseja excluir o editora aperte o botão OK.</Text>
-
+                <View key={selectedEditora.cnpj} style={styles.container}>
+                    <Text style={styles.title}>Deseja excluir essa editora? ({selectedEditora.name})?</Text>
+                    <Text style={styles.subTitle}>Se deseja excluir a editora aperte o botão OK.</Text>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity
                             onPress={deleteEditora}>

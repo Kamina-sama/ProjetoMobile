@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import EditoraStorage from './EditoraStuff';
 import AddEditora from './CreateEditora'
 import DeleteEditora from './DeleteEditora'
+import EditarEditora from './EditarEditora'
 
 const editoraStorage = new EditoraStorage();
 
@@ -16,7 +17,7 @@ const Editora = (props) => {
     const [selectedEditora, setSelectedEditora] = useState(false);
 
     const addEditora = (data) => {
-      const resultado= editoraStorage.storeData(data, data.cnpj);
+      const resultado= editoraStorage.storeData(JSON.stringify(data), data.cnpj);
       if(resultado){
           Alert.alert("Sucesso","Editora cadastrada com sucesso");
           /*editoraStorage.getData(editora.cnpj).then(result => {
@@ -29,13 +30,22 @@ const Editora = (props) => {
     }
 
     const updateEditora = (data) => {
-      console.log(data)
-      setEditora(editora.map(edit => edit.cnpj == data.cnpj ? data : edit) )
+      const resultado = editoraStorage.storeData(JSON.stringify(data), data.cnpj)
+        if(resultado){
+          Alert.alert("Sucesso","Editora atualizada com sucesso");
+          /*editoraStorage.getData(editora.cnpj).then(result => {
+              Alert.alert("Dados cadastrados", JSON.stringify(result));
+          });*/
+          setEditora(editora.map(edit => edit.cnpj == data.cnpj ? data : edit) );
+      }else{
+          Alert.alert("Erro", "Houve erro ao atualizar a editora.\n\n\n"+resultado);
+      }
+    
     }
   
     const deleteEditora = cnpj => {
-      setEditora(editora.filter(edit => edit.cnpj !== cnpj))
-      //AssyncStorage.removeItem ...
+      editoraStorage.removeItem(cnpj);
+      setEditora(editora.filter(edit => edit.cnpj !== cnpj));
     }
 
 
@@ -58,9 +68,9 @@ const Editora = (props) => {
                     .then(data => {
                         setEditora(data);
                         Alert.alert("Editora",JSON.stringify(data));
-                        /*for (let i = 0; i < data.length; i++) {
+                        for (let i = 0; i < data.length; i++) {
                           rows.push(data[i]);
-                        }*/
+                        }
                     });
             });
     },[]);
