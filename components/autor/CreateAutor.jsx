@@ -35,6 +35,7 @@ const CreateAutor = (props) => {
 
 return (
     <View style={styles.container}>
+        <Text> Cadastro do Autor </Text>
         <TextInput 
             textContentType='name' 
             onChangeText={ (text) => { setAutor({...autor, nome : text}) } }  
