@@ -26,7 +26,7 @@ const DeleteEditora = (props) => {
         >
             <View style={styles.BackgroundContainer}>
                 <View key={selectedEditora.cnpj} style={styles.container}>
-                    <Text style={styles.title}>Deseja excluir essa editora? ({selectedEditora.name})?</Text>
+                    <Text style={styles.title}>Deseja excluir essa editora? ({selectedEditora.nome})?</Text>
                     <Text style={styles.subTitle}>Se deseja excluir a editora aperte o botão OK.</Text>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity
