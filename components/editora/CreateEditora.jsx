@@ -1,11 +1,10 @@
 import 'react-native-gesture-handler';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Alert, TouchableOpacity, Modal } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import {FloatingLabelInput} from 'react-native-floating-label-input';
-//import AsyncStorage from '@react-native-async-storage/async-storage';
-import {storeData, getData} from './EditoraStuff';
+import EditoraStorage from './EditoraStuff';
 
+const editoraStorage = new EditoraStorage();
 
 
 const CreateEditora = (props) => {
@@ -18,78 +17,70 @@ const CreateEditora = (props) => {
     }
 
     const [editora, setEditora]=useState(initialEditora);
+    const {isOpen, closeModal} = props;
 
     const handleChange = (value, name) => {
         setEditora({...editora, [name] : value});
     }
 
-    const cadastrar = () => {
-        const resultado= storeData(editora, editora.cnpj);
-        if(resultado){
-            Alert.alert("Sucesso","Editora cadastrada com sucesso");
-            getData(editora.cnpj).then(result => {
-                Alert.alert("Dados cadastrados", JSON.stringify(result));
-            });
-        }else{
-            Alert.alert("Erro", "Houve erro ao cadastrar a editora.\n\n\n"+resultado);
-        }
+    const cadastrarEditora = () => {
+        props.addEditora(editora);
+        props.closeModal();
     }
     
-    /*const cadastrar = async () => {
-        const id=await createUser(user, email, senha);
-        await setCurrentUser(id);
-        const x=await AsyncStorage.getItem(id);
-    }*/
-
     return (
-        <View style={styles.container}>
-            <TextInput 
-                textContentType='name' 
-                onChangeText={ (text) => { handleChange(text,"nome")} }  
-                placeholder='Nome da editora'
-                style={styles.textBox}
-            />
-            
-            <TextInput 
-                keyboardType="numeric"
-                onChangeText={ (text) => { handleChange(text,"cnpj")} }  
-                placeholder='CNPJ'
-                style={styles.textBox}
-            />
+        <Modal visible={isOpen} onRequestClose={closeModal} animationType="slide">
+            <View style={styles.container}>
+                <Text style={styles.title}>Nova Editora </Text>
+                <TextInput 
+                    textContentType='name' 
+                    onChangeText={ (text) => { handleChange(text,"nome")} }  
+                    placeholder='Nome da editora'
+                    style={styles.textBox}
+                />
+                
+                <TextInput 
+                    keyboardType="numeric"
+                    onChangeText={ (text) => { handleChange(text,"cnpj")} }  
+                    placeholder='CNPJ'
+                    style={styles.textBox}
+                />
 
-            <TextInput 
-                onChangeText={ (text) => { handleChange(text,"endereco")} }  
-                placeholder='Endereço'
-                style={styles.textBox}
-            />
+                <TextInput 
+                    onChangeText={ (text) => { handleChange(text,"endereco")} }  
+                    placeholder='Endereço'
+                    style={styles.textBox}
+                />
 
-            <TextInput 
-                keyboardType="numeric"
-                onChangeText={ (text) => { handleChange(text,"telefone")} }  
-                placeholder='Telefone'
-                style={styles.textBox}
-            />
+                <TextInput 
+                    keyboardType="numeric"
+                    onChangeText={ (text) => { handleChange(text,"telefone")} }  
+                    placeholder='Telefone'
+                    style={styles.textBox}
+                />
 
-            <TextInput 
-                textContentType='emailAddress' 
-                onChangeText={ (text) => {handleChange(text, "email")} } 
-                placeholder='Email@Host.com'
-                style={styles.textBox}
-            />
-            <Text style={styles.buttonContainer}>
-                <TouchableOpacity 
-                    onPress={cadastrar}
-                    style={ {...styles.button, marginVertical: 0} }
-                >
-                    <Text style={styles.buttonText}>Salvar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={ {...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato"} }
-                >
-                    <Text style={styles.buttonText}>Cancelar</Text>
-                </TouchableOpacity>
-            </Text>
-        </View>
+                <TextInput 
+                    textContentType='emailAddress' 
+                    onChangeText={ (text) => {handleChange(text, "email")} } 
+                    placeholder='Email@Host.com'
+                    style={styles.textBox}
+                />
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity 
+                        onPress={cadastrarEditora}
+                        style={ {...styles.button, marginVertical: 0} }
+                    >
+                        <Text style={styles.buttonText}>Salvar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress = {closeModal}
+                        style={ {...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato"} }
+                    >
+                        <Text style={styles.buttonText}>Cancelar</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </Modal>
     );
 }
 export default CreateEditora;
