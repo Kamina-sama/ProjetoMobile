@@ -1,25 +1,18 @@
-import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button, Alert } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
+import { useState, useEffect } from 'react';
+import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Login from './Screens/Login';
+import SignUp from './Screens/SignUp';
+import MyBooks from './Screens/MyBooks';
+import Routes from './'
+import { NavigationContainer } from '@react-navigation/native';
 
-import CreateBookScreen from './CreateBook';
-import StartScreen from './StartScreen';
-import LoginScreen from './LoginScreen';
-import CadastroScreen from './CadastroScreen'
-import LoginAnalizer from './LoginAnalizer';
 
-const Stack=createStackNavigator();
-
-const Routes = ()=> {
+export default function App() {
   return (
-    <Stack.Navigator initialRouteName='StartScreen'>
-        <Stack.Screen component={StartScreen} name='StartScreen'/>
-        <Stack.Screen component={LoginScreen} name='LoginScreen'/>
-        <Stack.Screen component={CadastroScreen} name='CadastroScreen' />
-        <Stack.Screen component={LoginAnalizer} name='LoginAnalizer' />
-    </Stack.Navigator>
+    <NavigationContainer>
+
+    </NavigationContainer>
   );
 }
-export default Routes;
