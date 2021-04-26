@@ -7,43 +7,29 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useFocusEffect } from '@react-navigation/native';
 
 
-export default function MyBooks({navigation, route}) {
-  const [loggedUser, setLoggedUser]=useState(route.params.loggedUser);
-  const [seeTitle, setSeeTitle]=useState(null);
+export default function Store({navigation, route}) {
+  const [id, setID]=useState(null);
   const [books, setBooks]=useState(null);
 
-  useEffect(()=>{
-    let tempBooks=[];
-    AsyncStorage.getItem('loggedUser', (error, result)=>{
-      result=JSON.parse(result);
-      if(loggedUser.myBooks.length!==result.myBooks.length) {
-        setLoggedUser(result);
-      }
-    });
-    AsyncStorage.getItem('users',(error, result)=>{
-        result=JSON.parse(result);
-        let users=result;
-        users.forEach((user)=>{
-            if(user.name!==loggedUser.name && user.email!==user.email) {
-                let userBooks=user.myBooks;
-                userBooks=userBooks.map((book)=>{book.author=user.name});
-                tempBooks.push(userBooks);
-            }
-        });
-    });
-    setBooks(tempBooks);
-  });
+  useFocusEffect(getBooks);
 
-  function ChangeSeeTitle(title) {
-    if(title===seeTitle) setSeeTitle(null);
-    else setSeeTitle(title);
+  function getBooks() {
+    AsyncStorage.getItem('books', (error, result)=>{
+      result=JSON.parse(result);
+      setBooks(result);
+    });
+  }
+
+  function ChangeBookView(bookID) {
+    if(id===bookID) setID(null);
+    else setID(bookID);
   }
 
   const BookSummary=({item})=>{
     return (
       <View style={[styles.item, {flex:0, height:'auto'}]}>
         <TouchableOpacity
-          onPress={()=>ChangeSeeTitle(item.title)}
+          onPress={()=>ChangeBookView(item.id)}
           style={{flex:0, flexDirection:'row', height:'auto'}}>
           {item.coverImageData!==null?<Image 
             style={[styles.image, {aspectRatio:item.coverImageData.width/item.coverImageData.height}]}
@@ -51,7 +37,9 @@ export default function MyBooks({navigation, route}) {
           <View style={{flexDirection:'column'}}>
             <Text>Title: {item.title}</Text>
             <Text>Genre: {item.genre}</Text>
-            {seeTitle===item.title? <Text>Sinopsis: {item.sinopsis}</Text>:null}
+            <Text>Author: {item.author}</Text>
+            <Text>Price: {item.price}</Text>
+            {id===item.id? <Text>Sinopsis: {item.sinopsis}</Text>:null}
           </View>
         </TouchableOpacity>
       </View>
@@ -69,26 +57,13 @@ export default function MyBooks({navigation, route}) {
             alignSelf: "center",
             textTransform: "uppercase"
           }}>Store</Text>
-          <TouchableOpacity onPress={()=>{navigation.navigate('MyBooks',{loggedUser})}}>
-          <Text 
-            style={{
-            fontSize: 24,
-            color: "#444",
-            fontWeight: "bold",
-            alignSelf: "center",
-            textTransform: "uppercase"
-            }}
-            onPress={()=>{navigation.navigate('MyBooks',{loggedUser})}}
-          >My Books</Text></TouchableOpacity>
         </View>
         <View style={styles.formContainer}>
-          {loggedUser.myBooks.length==0? <Text style={{alignSelf:'center',marginTop:'80%', fontSize:24, color:'#f00'}}>You don't have any books!</Text>:null}
           <FlatList 
             data={books} 
             renderItem={BookSummary} 
-            keyExtractor={(item) => item.title}
-            extraData={seeTitle}/>
-
+            keyExtractor={(item) => item.id.toString()}
+            extraData={id}/>
         </View>
       </ImageBackground>
     </SafeAreaView>
@@ -131,8 +106,10 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   image:{
+    margin:5,
     alignSelf:'flex-start',
-    width:'20%',
+    maxWidth:'40%',
+    minWidth:'20%',
     height: undefined
   },
   deleteButton: {

@@ -6,15 +6,18 @@ import { Alert, Image, FlatList, ImageBackground, Pressable, SafeAreaView, Style
 
 import * as ImagePicker from 'expo-image-picker';
 
+const generos=["Romance", "Comédia", "Biografia", "Aventura", "Drama", "Clássico"]
+
 export default function EditBook({navigation, route}) {
-  const originalTitle=route.params.book.title;
-  const originalGenre=route.params.book.genre;
-  const originalSinopsis=route.params.book.sinopsis;
+  const originalBook=route.params.book;
+  const bookId=route.params.book.id;
 
   const [title, setTitle]=useState(route.params.book.title);
   const [genre, setGenre]=useState(route.params.book.genre);
   const [sinopsis, setSinopsis]=useState(route.params.book.sinopsis);
   const [imageData, setImageData]=useState(route.params.book.coverImageData);
+  const [author, setAuthor]=useState(route.params.book.author);
+  const [price, setPrice]=useState(route.params.book.price);
 
   async function HandleFileSelect() {
     if (Platform.OS !== 'web') {
@@ -36,35 +39,13 @@ export default function EditBook({navigation, route}) {
 
   //TODO: change this function to modify user original book:
   async function HandleUpload() {
-    let newBook={title, genre, sinopsis, coverImageData:imageData};
-    let loggedUser=await AsyncStorage.getItem('loggedUser');
-    loggedUser=JSON.parse(loggedUser);
-
-    loggedUser.myBooks=loggedUser.myBooks.map((book)=>{
-        console.log(book.title);
-      if(book.title===originalTitle && book.genre===originalGenre && book.sinopsis===originalSinopsis) {
-        return newBook;
-      }
-      return book;
-    });
-
-    //update logged user in users:
-    let users=await AsyncStorage.getItem('users');
-    users=JSON.parse(users);
-    users=users.map(element=>{
-      if(element.name===loggedUser.name && element.email===loggedUser.email) return loggedUser;
-      return element;
-    });
-    users=JSON.stringify(users);
-    await AsyncStorage.setItem('users',users);
-
-    //now we just need to wrap it up by updating the loggedUser itself:
-    loggedUser=JSON.stringify(loggedUser);
-    await AsyncStorage.setItem('loggedUser', loggedUser);
-
-    loggedUser=JSON.parse(loggedUser);
-
-    navigation.navigate('MyBooks',{loggedUser});
+    let newBook={id:bookId, title, genre, sinopsis, coverImageData:imageData, price, author};
+    let books=await AsyncStorage.getItem('books');
+    books=JSON.parse(books);
+    const index=books.findIndex(book=>book.id===bookId);
+    books[index]=newBook;
+    books=JSON.stringify(books);
+    await AsyncStorage.setItem('books', books);
   }
   
   function handleGoBack() {

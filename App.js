@@ -11,6 +11,7 @@ import Store from './Screens/Store';
 import Editora from './Screens/publishingCompany/Editora';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
+import DeleteAsync from './Screens/DeleteAsync';
 
 const Drawer = createDrawerNavigator();
 
@@ -20,10 +21,11 @@ export default function App() {
       <Drawer.Navigator initialRouteName={'SignUp'}>
         <Drawer.Screen name={'SignUp'} component={SignUp} />
         <Drawer.Screen name={'Login'} component={Login} options={{gestureEnabled:false}}/>
-        <Drawer.Screen name={'UploadBook'} component={UploadBook} options={{gestureEnabled:false}}/>
-        <Drawer.Screen name={'MyBooks'} component={MyBooks}/>
+        <Drawer.Screen name={'UploadBook'} component={UploadBook}/>
         <Drawer.Screen name={'EditBook'} component={EditBook} options={{gestureEnabled:false}}/>
         <Drawer.Screen name={'Editora'} component={Editora} />
+        <Drawer.Screen name={'Store'} component={Store}/>
+        <Drawer.Screen name={'DeleteAsync'} component={DeleteAsync}/>
       </Drawer.Navigator>
     </NavigationContainer>
   );

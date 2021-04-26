@@ -1,22 +1,27 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { useState, useEffect } from 'react';
-import { Alert, Image, FlatList, ImageBackground, Pressable, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, {useState} from 'react';
+import { Alert, Image, Picker, Slider, ImageBackground, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import * as ImagePicker from 'expo-image-picker';
 
+import Input from '../../src/components/Input';
+
+const generos=["Romance", "Comédia", "Biografia", "Aventura", "Drama", "Clássico"]
+
 export default function UploadBook({navigation, route}) {
   const [title, setTitle]=useState('');
-  const [genre, setGenre]=useState('');
+  const [genre, setGenre]=useState(generos[0]);
   const [sinopsis, setSinopsis]=useState('');
   const [imageData, setImageData]=useState(null);
+  const [author, setAuthor]=useState('');
+  const [price, setPrice]=useState(10);
 
   async function HandleFileSelect() {
     if (Platform.OS !== 'web') {
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== 'granted') {
-        alert('Sorry, we need camera roll permissions to make this work!');
+        Alert.alert('Sorry, we need camera roll permissions to make this work!');
         return;
       }
     }
@@ -30,34 +35,34 @@ export default function UploadBook({navigation, route}) {
     setImageData(result);
   }
 
+  async function HandleValidation() {
+    if(title.length==0 || sinopsis.length==0 || author.length==0) 
+    Alert.alert('Erro','é necessario preencher todos os campos de texto');
+    else {
+      await HandleUpload();
+    }
+  }
+
   async function HandleUpload() {
-    let newBook={title, genre, sinopsis, coverImageData:imageData};
-    let loggedUser=await AsyncStorage.getItem('loggedUser');
-    loggedUser=JSON.parse(loggedUser);
-    loggedUser.myBooks.push(newBook);
-    //update logged user in users:
-    let users=await AsyncStorage.getItem('users');
-    users=JSON.parse(users);
-    users=users.map(element=>{
-      if(element.name===loggedUser.name && element.email===loggedUser.email) return loggedUser;
-      return element;
-    });
-    users=JSON.stringify(users);
-    await AsyncStorage.setItem('users',users);
-
-    //now we just need to wrap it up by updating the loggedUser itself:
-    loggedUser=JSON.stringify(loggedUser);
-    await AsyncStorage.setItem('loggedUser', loggedUser);
-
-    loggedUser=JSON.parse(loggedUser);
-    navigation.navigate('MyBooks',{loggedUser});
+    let ID=await AsyncStorage.getItem('ID');
+    if(ID===null) ID=JSON.stringify({nextBookID:0, nextUserID:0});
+    ID=JSON.parse(ID);
+    console.log(ID.nextBookID);
+    let newBook={id:ID.nextBookID, title, genre, price, sinopsis, coverImageData:imageData, author, comments:[]};
+    let livros=await AsyncStorage.getItem('books');
+    if(livros==null) livros=JSON.stringify([]);
+    livros=JSON.parse(livros);
+    livros.push(newBook);
+    livros=JSON.stringify(livros);
+    await AsyncStorage.setItem('books', livros);
+    ++ID.nextBookID;
+    ID=JSON.stringify(ID);
+    await AsyncStorage.setItem('ID',ID);
+    navigation.navigate('Store');
   }
   
   function handleGoBack() {
-    AsyncStorage.getItem('loggedUser', (error, result)=>{
-      result=JSON.parse(result);
-      navigation.navigate('MyBooks',{loggedUser:result});
-    });
+    navigation.navigate('Store');
   }
 
   return (
@@ -69,12 +74,16 @@ export default function UploadBook({navigation, route}) {
             value={title} onChangeText={setTitle} 
             textContentType={'none'}
             placeholder={'Title'}/>
-          <TextInput 
-            style={styles.input} 
-            value={genre} 
-            onChangeText={setGenre}  
-            textContentType={'none'} 
-            placeholder={'Genre'}/>
+          <View style={{flexDirection:'row'}}>
+            <Text style={{marginHorizontal:20,paddingTop:15, fontSize:14}}>Genre:</Text>
+            <Picker
+              selectedValue={genre}
+              style={{ height: 50, width: 150 }}
+              onValueChange={(itemValue, itemIndex) => setGenre(itemValue)}
+            >
+              {generos.map(genero => <Picker.Item key={genero} label={genero} value={genero}/>)}
+            </Picker>
+          </View>
           <TextInput 
             style={[styles.input,{borderRadius:10, height:100, textAlignVertical: 'top'}]} 
             value={sinopsis} 
@@ -83,6 +92,14 @@ export default function UploadBook({navigation, route}) {
             numberOfLines={4}
             textContentType={'none'} 
             placeholder={'Sinopsis'}/>
+          <TextInput 
+            style={styles.input} 
+            value={author} 
+            onChangeText={setAuthor} 
+            textContentType={'name'} 
+            placeholder={'Author\'s name'}/>
+            <Text style={{alignSelf:'center'}}>Price: R${price}</Text>
+          <Slider minimumValue={10} maximumValue={500} onValueChange={(value)=>setPrice(value.toFixed(2))}/>
           {imageData!==null && 'uri' in imageData?
               <Image 
                 style={[styles.image, {aspectRatio:imageData.width/imageData.height}]} 
@@ -97,7 +114,7 @@ export default function UploadBook({navigation, route}) {
           </TouchableOpacity>
           <View style={styles.buttons}>
             <TouchableOpacity 
-              onPress={HandleUpload} 
+              onPress={HandleValidation} 
               style={styles.appButtonContainer}>
                 <Text style={styles.appButtonText}>Upload</Text>
             </TouchableOpacity>
