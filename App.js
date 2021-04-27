@@ -12,6 +12,7 @@ import Editora from './Screens/publishingCompany/Editora';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import DeleteAsync from './Screens/DeleteAsync';
+import CommentsScreen from './src/pages/commentsScreen/CommentsScreen'
 
 const Drawer = createDrawerNavigator();
 
@@ -26,6 +27,7 @@ export default function App() {
         <Drawer.Screen name={'Editora'} component={Editora} />
         <Drawer.Screen name={'Store'} component={Store}/>
         <Drawer.Screen name={'DeleteAsync'} component={DeleteAsync}/>
+        <Drawer.Screen name={'CommentsScreen'} component={CommentsScreen}/>
       </Drawer.Navigator>
     </NavigationContainer>
   );
