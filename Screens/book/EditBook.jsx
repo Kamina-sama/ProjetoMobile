@@ -1,15 +1,15 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { useState, useEffect } from 'react';
-import { Alert, Image, FlatList, ImageBackground, Pressable, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, {useState} from 'react';
+import { Alert, Image, Picker, Slider, ImageBackground, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import * as ImagePicker from 'expo-image-picker';
+
+import Input from '../../src/components/Input';
 
 const generos=["Romance", "Comédia", "Biografia", "Aventura", "Drama", "Clássico"]
 
 export default function EditBook({navigation, route}) {
-  const originalBook=route.params.book;
   const bookId=route.params.book.id;
 
   const [title, setTitle]=useState(route.params.book.title);
@@ -46,13 +46,19 @@ export default function EditBook({navigation, route}) {
     books[index]=newBook;
     books=JSON.stringify(books);
     await AsyncStorage.setItem('books', books);
+    navigation.navigate('Store');
+  }
+
+  async function HandleValidation() {
+    if(title.length==0 || sinopsis.length==0 || author.length==0) 
+    Alert.alert('Erro','é necessario preencher todos os campos de texto');
+    else {
+      await HandleUpload();
+    }
   }
   
   function handleGoBack() {
-    AsyncStorage.getItem('loggedUser', (error, result)=>{
-      result=JSON.parse(result);
-      navigation.navigate('MyBooks',{loggedUser:result});
-    });
+    navigation.navigate('Store');
   }
 
   return (
@@ -64,12 +70,16 @@ export default function EditBook({navigation, route}) {
             value={title} onChangeText={setTitle} 
             textContentType={'none'}
             placeholder={'Title'}/>
-          <TextInput 
-            style={styles.input} 
-            value={genre} 
-            onChangeText={setGenre}  
-            textContentType={'none'} 
-            placeholder={'Genre'}/>
+          <View style={{flexDirection:'row'}}>
+            <Text style={{marginHorizontal:20,paddingTop:15, fontSize:14}}>Genre:</Text>
+            <Picker
+              selectedValue={genre}
+              style={{ height: 50, width: 150 }}
+              onValueChange={(itemValue, itemIndex) => setGenre(itemValue)}
+            >
+              {generos.map(genero => <Picker.Item key={genero} label={genero} value={genero}/>)}
+            </Picker>
+          </View>
           <TextInput 
             style={[styles.input,{borderRadius:10, height:100, textAlignVertical: 'top'}]} 
             value={sinopsis} 
@@ -78,6 +88,14 @@ export default function EditBook({navigation, route}) {
             numberOfLines={4}
             textContentType={'none'} 
             placeholder={'Sinopsis'}/>
+          <TextInput 
+            style={styles.input} 
+            value={author} 
+            onChangeText={setAuthor} 
+            textContentType={'name'} 
+            placeholder={'Author\'s name'}/>
+            <Text style={{alignSelf:'center'}}>Price: R${price}</Text>
+          <Slider minimumValue={10} maximumValue={500} onValueChange={(value)=>setPrice(value.toFixed(2))}/>
           {imageData!==null && 'uri' in imageData?
               <Image 
                 style={[styles.image, {aspectRatio:imageData.width/imageData.height}]} 
@@ -92,7 +110,7 @@ export default function EditBook({navigation, route}) {
           </TouchableOpacity>
           <View style={styles.buttons}>
             <TouchableOpacity 
-              onPress={HandleUpload} 
+              onPress={HandleValidation} 
               style={styles.appButtonContainer}>
                 <Text style={styles.appButtonText}>Save Changes</Text>
             </TouchableOpacity>

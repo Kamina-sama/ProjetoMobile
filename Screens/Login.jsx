@@ -12,18 +12,16 @@ export default function Login(props) {
 
   async function handleLogin() {
     let users=await AsyncStorage.getItem('users');
-    if(users===null || users.length===0) {
-      Alert.alert('Error','no users in here...');
-      return;
-    }
+    if(users===null) users=JSON.stringify([{name:'admin', id:0, email:'admin@email.com', password:'admin'}]) 
     users=JSON.parse(users);
     let desired_user=null;
     users.forEach(element => {
       if((element.name===field || element.email===field) && element.password===password) desired_user=element;
     });
     if(desired_user!==null) {
+      if(desired_user.id===0) Alert.alert('Admin mode','welcome back, admin!');
       AsyncStorage.setItem('loggedUser', JSON.stringify(desired_user));
-      props.navigation.navigate('MyBooks',{loggedUser:desired_user});
+      props.navigation.navigate('Store');
     }
     else {
       //Seria legal mostrar um texto em vermelho dizendo que a senha ou o nome estao errados,
