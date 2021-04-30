@@ -50,14 +50,7 @@ export const CommentsScreen = (props) => {
 
         let resultado2 = resultado.map(i => i)
         console.log(resultado2)
-        /* setComentario(resultado2) */
-
-        /* if( comentatios === null ) comentatios = JSON.stringify([{name:'admin', id:0, email:'admin@email.com', password:'admin'}]) 
-        users=JSON.parse(users);
-        let desired_user=null;
-        users.forEach(element => {
-          if((element.name===field || element.email===field) && element.password===password) desired_user=element;
-        }); */
+   
       }
 
       
