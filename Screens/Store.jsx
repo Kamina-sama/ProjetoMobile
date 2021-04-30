@@ -13,8 +13,17 @@ export default function Store({navigation, route}) {
   const [id, setID]=useState(null);
   const [books, setBooks]=useState(null);
   const [isAdmin, setIsAdmin]=useState(false);
+  const [refreshThingy, setRefreshThingy]=useState(true);
 
   const [comment, setComment]=useState('');
+
+  function ClearFields() {
+    setIsAdmin(false);
+    setLoggedUser(null);
+    setID(null);
+    setBooks(null);
+    setComment('');
+  }
 
   async function HandlePostComment(book) {
     if(comment==='') {
@@ -34,22 +43,20 @@ export default function Store({navigation, route}) {
     setComment('');
   }
 
-  useEffect(update);
+  useFocusEffect(React.useCallback(update, [books, loggedUser, refreshThingy]));
 
   function update() {
     console.log('update');
-    setTimeout(()=>{
-      CheckIfAdmin();
-      getBooks();
-    }, 15000)
-    setTimeout(()=>{}, 15000);
+    CheckIfAdmin();
+    getBooks();
+    setTimeout(()=>{setRefreshThingy(!refreshThingy)}, 1000);
   }
 
   function CheckIfAdmin() {
     console.log('checkIfAdmin');
     AsyncStorage.getItem('loggedUser',(error,result)=>{
       result=JSON.parse(result);
-      setLoggedUser(result);
+      if(result==null || loggedUser==null || loggedUser.id!==result.id) setLoggedUser(result);
       if(result==null || result.id==undefined || result.id!==0) setIsAdmin(false);
       else setIsAdmin(true);
     });
@@ -59,7 +66,7 @@ export default function Store({navigation, route}) {
     console.log('getBooks');
     AsyncStorage.getItem('books', (error, result)=>{
       result=JSON.parse(result);
-      setBooks(result);
+      if(JSON.stringify(result)!==JSON.stringify(books)) setBooks(result);
     });
   }
 
@@ -111,7 +118,10 @@ export default function Store({navigation, route}) {
           {isAdmin?
             <View style={{flexDirection:'row'}}>
               <TouchableOpacity 
-                onPress={()=>navigation.navigate('EditBook',{book:item})}
+                onPress={()=>{
+                  ClearFields();
+                  navigation.navigate('EditBook',{book:item});
+                }}
                 style={styles.editButton}
                 >
                 <Text>Edit</Text>
@@ -128,6 +138,7 @@ export default function Store({navigation, route}) {
             source={{uri:'data:image/jpeg;base64,'+item.coverImageData.base64}}/>:<Image 
             style={{aspectRatio:420/600, flex:0, width:undefined}}
             source={genericBookSource}/>}
+          <Button title={'Buy'}/>
           <View style={{flexDirection:'row', justifyContent:'space-between', margin:10}}>
             <View>
               <Text>{item.title} por {item.author}</Text>
@@ -175,10 +186,14 @@ export default function Store({navigation, route}) {
 
   return (
     <SafeAreaView style={{flex:1}}>
+
       <ImageBackground source={require('../assets/book-library-with-open-textbook.jpg')} style={{flex:1}}>
         <View style={styles.tab}>
         <Text 
-          onPress={()=>navigation.navigate('MyAccount')}
+          onPress={()=>{
+            ClearFields();
+            navigation.navigate('MyAccount')
+          }}
           style={{
             fontSize: 20,
             color: "#555",
@@ -201,7 +216,10 @@ export default function Store({navigation, route}) {
             keyExtractor={(item) => item.id.toString()}
             extraData={id}/>
           {isAdmin? <TouchableOpacity
-            onPress={()=>navigation.navigate('UploadBook')}
+            onPress={()=>{
+              ClearFields();
+              navigation.navigate('UploadBook');
+            }}
             style={styles.uploadBookButton}>
             <Icon name="plus"  size={30} color="#0dd" />
           </TouchableOpacity>:null}
