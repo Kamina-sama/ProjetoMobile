@@ -7,7 +7,7 @@ import LoginScreen from '../pages/loginScreen/LoginScreen';
 import CadastroScreen from '../pages/cadastroScreen/CadastroScreen'
 import { BookStore } from '../pages/bookStore';
 import { BookDetail } from '../pages/bookDetails';
-import { CommentsScreen} from '../pages/commentsScreen';
+import { CommentsScreen} from '../pages/commentsScreen/CommentsScreen';
 
 const Stack=createStackNavigator();
 
