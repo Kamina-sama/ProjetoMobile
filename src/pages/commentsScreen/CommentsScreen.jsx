@@ -3,11 +3,13 @@ import React, { useState } from 'react';
 import { CustomInput } from '../../components/Input';
 import { PrimaryButton } from '../../components/PrimaryButton';
 import { CheckBox,Input } from 'react-native-elements';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-
+import { SafeAreaView, ScrollView, StyleSheet, Text, View, AsyncStorage } from 'react-native';
+import { SecondaryButton } from '../../components/SecondaryButton';
+/* import  from '@react-native-community/async-storage' */
 
 
 export const CommentsScreen = (props) => {
+    const [comentarios, setComentarios] = useState([])
     const [comentario, setComentario] = useState({
         nome: "",
         titulo: "",
@@ -15,7 +17,44 @@ export const CommentsScreen = (props) => {
         recomenda: false,
     })
 
-    const [comentarios, setComentarios] = useState([])
+    React.useEffect(() => {
+        async function getData() {
+            let json = await AsyncStorage.getItem('comentatios');
+            let resultado = JSON.parse(json)
+            console.log('=>',resultado)
+            /* setComentario(resultado) */
+        }
+        getData()
+    },[])
+
+    async function handleComemnt() {     
+
+        if (comentario.nome === ''){
+            alert('Informe o Nome do Autor do Comentario!')
+        }else if (comentario.nome.length < 4){
+             alert('O Nome do autor do comentário deve ter mais que 4 letras')
+        }else if (comentario.titulo === ''){
+            alert('Informe o Titulo!')
+        }else if (comentario.titulo.length < 10){
+            alert('O Titulo deve ter pelo menos 10 caracteres!')
+        }else if (comentario.descricao === ''){
+            alert('Escreva seu Comentário com pelo menos 15 Caracteres!')
+        }else if (comentario.descricao.length < 10){
+            alert('O Comentario deve ter pelo menos 15 caracters!') 
+        }else{
+            alert('Adicionado comentário');
+          AsyncStorage.setItem('comentatios', JSON.stringify(comentarios.map(i => i)));
+        }
+        
+        let json = await AsyncStorage.getItem('comentatios');
+        let resultado = JSON.parse(json)
+
+        let resultado2 = resultado.map(i => i)
+        console.log(resultado2)
+   
+      }
+
+      
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
@@ -25,6 +64,7 @@ export const CommentsScreen = (props) => {
                 <Input
                     placeholder='Seu Nome'
                     onChangeText={(text)=>setComentario({...comentario,nome:text})}
+                    
                 />
                 <Input
                     placeholder='Seu titulo'
@@ -40,20 +80,28 @@ export const CommentsScreen = (props) => {
                     onPress={()=>setComentario({...comentario,recomenda:!comentario.recomenda})}
                 />
                 <PrimaryButton
-                    onPress={()=>setComentarios([comentario,...comentarios])}
+                    onPress={()=> {
+                        setComentarios([comentario,...comentarios])
+                        handleComemnt()
+                    }}
+                   
                 > 
                     Publicar 
                 </PrimaryButton>
+
+                <SecondaryButton 
+                    onPress={()=>props.navigation.navigate('BookDetails')}
+                    >Voltar</SecondaryButton>
                    
                 <View>
                     {comentarios.map((item,index)=>{
                         console.log(item)
                         return(
                             <View key={index}> 
-                                <Text>{item.nome}</Text>
-                                <Text>{item.titulo}</Text>
-                                <Text>{item.descricao}</Text>
-                                <Text>{item.recomenda}</Text>
+                                <Text >Nome:{item.nome}</Text>
+                                <Text >Titulo:{item.titulo}</Text>
+                                <Text >Descrição:{item.descricao}</Text>
+                                <Text >Recomenda: {item.recomenda}</Text>
                             </View>
                         )
                     })}
