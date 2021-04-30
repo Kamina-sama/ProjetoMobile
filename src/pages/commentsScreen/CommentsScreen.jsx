@@ -4,6 +4,7 @@ import { CustomInput } from '../../components/Input';
 import { PrimaryButton } from '../../components/PrimaryButton';
 import { CheckBox,Input } from 'react-native-elements';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View, AsyncStorage } from 'react-native';
+import { SecondaryButton } from '../../components/SecondaryButton';
 /* import  from '@react-native-community/async-storage' */
 
 
@@ -87,16 +88,20 @@ export const CommentsScreen = (props) => {
                 > 
                     Publicar 
                 </PrimaryButton>
+
+                <SecondaryButton 
+                    onPress={()=>props.navigation.navigate('BookDetails')}
+                    >Voltar</SecondaryButton>
                    
                 <View>
                     {comentarios.map((item,index)=>{
                         console.log(item)
                         return(
                             <View key={index}> 
-                                <Text>{item.nome}</Text>
-                                <Text>{item.titulo}</Text>
-                                <Text>{item.descricao}</Text>
-                                <Text>{item.recomenda}</Text>
+                                <Text >Nome:{item.nome}</Text>
+                                <Text >Titulo:{item.titulo}</Text>
+                                <Text >Descrição:{item.descricao}</Text>
+                                <Text >Recomenda: {item.recomenda}</Text>
                             </View>
                         )
                     })}
