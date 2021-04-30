@@ -9,6 +9,7 @@ export default function DeleteAsync() {
     AsyncStorage.removeItem('users');
     AsyncStorage.removeItem('books');
     AsyncStorage.removeItem('ID');
+    AsyncStorage.removeItem('loggedUser');
     Alert.alert('deleted');
   }
   function HandleDeleteUsers() {

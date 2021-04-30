@@ -10,9 +10,14 @@ export default function Login(props) {
   const [field, setField]=useState('');
   const [password, setPassword]=useState('');
 
+  function clearFields() {
+    setField('');
+    setPassword('');
+  }
+
   async function handleLogin() {
     let users=await AsyncStorage.getItem('users');
-    if(users===null) users=JSON.stringify([{name:'admin', id:0, email:'admin@email.com', password:'admin'}]) 
+    if(users===null) users=JSON.stringify([{name:'admin', id:0, email:'admin@email.com', password:'admin', profileImageData:null}]) 
     users=JSON.parse(users);
     let desired_user=null;
     users.forEach(element => {
@@ -21,6 +26,7 @@ export default function Login(props) {
     if(desired_user!==null) {
       if(desired_user.id===0) Alert.alert('Admin mode','welcome back, admin!');
       AsyncStorage.setItem('loggedUser', JSON.stringify(desired_user));
+      clearFields();
       props.navigation.navigate('Store');
     }
     else {
@@ -53,7 +59,7 @@ export default function Login(props) {
                 <Text style={styles.appButtonText}>Login</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-              onPress={()=>navigation.navigate('SignUp')}
+              onPress={()=>{clearFields(); navigation.navigate('SignUp')}}
               style={[styles.appButtonContainer,{backgroundColor:'#e05'}]}>
               <Text style={styles.appButtonText}>Go back</Text>
             </TouchableOpacity>
