@@ -19,6 +19,14 @@ const CreateEditora = (props) => {
         setEditora({...editora, [name] : value});
     }
 
+    const validation = () => {
+        if(editora.nome == "" || editora.nome == "" || editora.nome == "" || editora.nome == "" || editora.nome == ""){
+            Alert.alert("Erro!","O campo '"+ name +"' é de preenchimento obrigatório.");
+        }else{
+            cadastrarEditora();
+        }
+    }
+
     const cadastrarEditora = () => {
         props.addEditora(editora);
         props.closeModal();
@@ -63,7 +71,7 @@ const CreateEditora = (props) => {
                 />
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity 
-                        onPress={cadastrarEditora}
+                        onPress={validation}
                         style={ {...styles.button, marginVertical: 0} }
                     >
                         <Text style={styles.buttonText}>Salvar</Text>

@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { ScrollView, Alert, Image, Picker, Slider, ImageBackground, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import EditoraStorage from '../publishingCompany/EditoraStuff';
 
 import * as ImagePicker from 'expo-image-picker';
 
@@ -16,6 +17,9 @@ export default function UploadBook({navigation, route}) {
   const [imageData, setImageData]=useState(null);
   const [author, setAuthor]=useState('');
   const [price, setPrice]=useState(10);
+  const [editora, setEditora] = useState();
+  const [editoras, setEditoras] = useState([]);
+
 
   function ClearFields() {
     setTitle('');
@@ -76,6 +80,18 @@ export default function UploadBook({navigation, route}) {
     navigation.navigate('Store');
   }
 
+  const getAllEditoras = () =>{
+    const editoraStorage = new EditoraStorage();
+    editoraStorage.getAllKeys().then(keys => {
+      editoraStorage.multiGet(keys).then(data => {
+        setEditoras(data);
+        Alert.alert("Editora",JSON.stringify(data));
+      });
+    });
+  }
+
+  useEffect(getAllEditoras(),[]);
+
   return (
     <SafeAreaView style={{flex:1}}>
       <ImageBackground source={require('../../assets/book-library-with-open-textbook.jpg')} style={{flex:1}}>
@@ -93,6 +109,16 @@ export default function UploadBook({navigation, route}) {
               onValueChange={(itemValue, itemIndex) => setGenre(itemValue)}
             >
               {generos.map(genero => <Picker.Item key={genero} label={genero} value={genero}/>)}
+            </Picker>
+          </View>
+          <View style={{flexDirection:'row'}}>
+            <Text style={{marginHorizontal:20,paddingTop:15, fontSize:14}}>Editora:</Text>
+            <Picker
+
+              style={{ height: 50, width: 150 }}
+              onValueChange={(itemValue, itemIndex) => setEditora(itemValue)}
+            >
+              {editoras.map(edit => <Picker.Item key={edit.cnpj} label={edit.nome} value={edit.cnpj}/>)}
             </Picker>
           </View>
           <TextInput 
