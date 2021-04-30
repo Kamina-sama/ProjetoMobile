@@ -15,6 +15,7 @@ import DeleteAsync from './Screens/DeleteAsync';
 import CommentsScreen from './src/pages/commentsScreen/CommentsScreen'
 import PaymentCards from './src/pages/paymentCards';
 import { DetailedCard } from './src/pages/paymentCards/detailedCard';
+import MyAccount from './Screens/MyAccount'
 
 
 const Drawer = createDrawerNavigator();
