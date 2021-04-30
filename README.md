@@ -4,6 +4,7 @@
 <ul>
   <li>@jgsneves: JOÃO GABRIEL SANTOS NEVES, matrícula: 042191010;</li>
   <li>@danielmattosrs: DANIEL MATTOS DOS REIS SILVA, Matrícula: 312171018;</li>
+  <li>@Kamina-sama: LEONARDO OLIVEIRA REIS, Matrícula: 144181029;</li>
 </ul>
 
 <h2>Atribuições:</h2>
@@ -11,6 +12,8 @@ Cada aluno ficou responsável por um CRUD.
 <ol>
   <li>Cartão de Pagamento: João Gabriel Santos Neves.</li>
   <li>Comentarios: Daniel Mattos dos Reis Silva</li>
+  <li>Livros: Leonardo Oliveira Reis</li>
+  <li>Usuario (nao foi a designação original desta pessoa): Leonardo Oliveira Reis</li>
 </ol>
 
 <h2>Vídeos de apresentação:</h2>

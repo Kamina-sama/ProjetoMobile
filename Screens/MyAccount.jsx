@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, SafeAreaView, Image, View, Alert } from 'react-native';
 
 import * as ImagePicker from 'expo-image-picker';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const genericProfilePictureSource=require('../assets/blank-profile-picture-973460_640.png');
 

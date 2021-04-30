@@ -31,6 +31,6 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: 'column',
         justifyContent: 'space-evenly',
-        alignItems: 'left',
+        alignItems: 'flex-start',
     },
 });
