@@ -13,6 +13,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import DeleteAsync from './Screens/DeleteAsync';
 import CommentsScreen from './src/pages/commentsScreen/CommentsScreen'
+import MyAccount from './Screens/MyAccount';
 
 const Drawer = createDrawerNavigator();
 
@@ -20,14 +21,15 @@ export default function App() {
   return (
     <NavigationContainer>
       <Drawer.Navigator initialRouteName={'SignUp'}>
-        <Drawer.Screen name={'SignUp'} component={SignUp} />
+        <Drawer.Screen name={'SignUp'} component={SignUp} options={{gestureEnabled:false}}/>
         <Drawer.Screen name={'Login'} component={Login} options={{gestureEnabled:false}}/>
-        <Drawer.Screen name={'UploadBook'} component={UploadBook}/>
+        <Drawer.Screen name={'UploadBook'} component={UploadBook} options={{gestureEnabled:false}}/>
         <Drawer.Screen name={'EditBook'} component={EditBook} options={{gestureEnabled:false}}/>
         <Drawer.Screen name={'Editora'} component={Editora} />
         <Drawer.Screen name={'Store'} component={Store}/>
         <Drawer.Screen name={'DeleteAsync'} component={DeleteAsync}/>
         <Drawer.Screen name={'CommentsScreen'} component={CommentsScreen}/>
+        <Drawer.Screen name={'MyAccount'} component={MyAccount} options={{gestureEnabled:false}}/>
       </Drawer.Navigator>
     </NavigationContainer>
   );

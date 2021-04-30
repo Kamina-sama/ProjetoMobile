@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { Alert, Image, Picker, Slider, ImageBackground, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Alert, Image, Picker, Slider, ImageBackground, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import * as ImagePicker from 'expo-image-picker';
 
@@ -11,6 +11,7 @@ const generos=["Romance", "Comédia", "Biografia", "Aventura", "Drama", "Clássi
 
 export default function EditBook({navigation, route}) {
   const bookId=route.params.book.id;
+  const comments=route.params.book.comments;
 
   const [title, setTitle]=useState(route.params.book.title);
   const [genre, setGenre]=useState(route.params.book.genre);
@@ -18,6 +19,15 @@ export default function EditBook({navigation, route}) {
   const [imageData, setImageData]=useState(route.params.book.coverImageData);
   const [author, setAuthor]=useState(route.params.book.author);
   const [price, setPrice]=useState(route.params.book.price);
+
+  function ClearFields() {
+    setTitle('');
+    setGenre('Romance');
+    setSinopsis('');
+    setImageData(null);
+    setAuthor('');
+    setPrice(10);
+  }
 
   async function HandleFileSelect() {
     if (Platform.OS !== 'web') {
@@ -39,13 +49,14 @@ export default function EditBook({navigation, route}) {
 
   //TODO: change this function to modify user original book:
   async function HandleUpload() {
-    let newBook={id:bookId, title, genre, sinopsis, coverImageData:imageData, price, author};
+    let newBook={id:bookId, title, genre, sinopsis, coverImageData:imageData, price, author, comments};
     let books=await AsyncStorage.getItem('books');
     books=JSON.parse(books);
     const index=books.findIndex(book=>book.id===bookId);
     books[index]=newBook;
     books=JSON.stringify(books);
     await AsyncStorage.setItem('books', books);
+    ClearFields();
     navigation.navigate('Store');
   }
 
@@ -58,6 +69,7 @@ export default function EditBook({navigation, route}) {
   }
   
   function handleGoBack() {
+    ClearFields();
     navigation.navigate('Store');
   }
 

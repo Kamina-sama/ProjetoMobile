@@ -2,34 +2,61 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { SafeAreaView, Modal, ImageBackground, Image, Button, Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, ScrollView, Modal, ImageBackground, Image, Button, Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useFocusEffect } from '@react-navigation/native';
 
 const genericBookSource=require('../assets/generic-book.jpg');
 
 export default function Store({navigation, route}) {
+  const [loggedUser, setLoggedUser]=useState(null);
   const [id, setID]=useState(null);
   const [books, setBooks]=useState(null);
   const [isAdmin, setIsAdmin]=useState(false);
 
-  useFocusEffect(update);
+  const [comment, setComment]=useState('');
+
+  async function HandlePostComment(book) {
+    if(comment==='') {
+      Alert.alert('Error','comment is empty!');
+      return;
+    }
+    let newComment={userID:id, userName:loggedUser.name, body:comment, date:new Date()}
+    let books=await AsyncStorage.getItem('books');
+    books=JSON.parse(books);
+    const index=books.findIndex(b=>b.id===book.id);
+    let comments=books[index].comments;
+    const userIndex=comments.findIndex(c=>c.userID===id);
+    if(userIndex===-1) comments.push(newComment);
+    else comments[userIndex]=newComment;
+    books=JSON.stringify(books);
+    AsyncStorage.setItem('books', books);
+    setComment('');
+  }
+
+  useEffect(update);
 
   function update() {
-    CheckIfAdmin();
-    getBooks();
+    console.log('update');
+    setTimeout(()=>{
+      CheckIfAdmin();
+      getBooks();
+    }, 15000)
+    setTimeout(()=>{}, 15000);
   }
 
   function CheckIfAdmin() {
+    console.log('checkIfAdmin');
     AsyncStorage.getItem('loggedUser',(error,result)=>{
-      console.log(result);
       result=JSON.parse(result);
-      if(result.id==undefined || result.id!==0) setIsAdmin(false);
+      setLoggedUser(result);
+      if(result==null || result.id==undefined || result.id!==0) setIsAdmin(false);
       else setIsAdmin(true);
     });
   }
 
   function getBooks() {
+    console.log('getBooks');
     AsyncStorage.getItem('books', (error, result)=>{
       result=JSON.parse(result);
       setBooks(result);
@@ -76,10 +103,11 @@ export default function Store({navigation, route}) {
         transparent={false}
         visible={id===item.id}
         onRequestClose={() => {
+          setComment('');
           ChangeBookView(item.id);
         }}
       >
-        <View style={{flex:1, justifyContent:'flex-start'}}>
+        <ScrollView contentContainerStyle={{justifyContent:'flex-start'}} style={{flex:1, flexGrow:1}}>
           {isAdmin?
             <View style={{flexDirection:'row'}}>
               <TouchableOpacity 
@@ -112,12 +140,16 @@ export default function Store({navigation, route}) {
           </View>
           <View style={{paddingTop:20,alignItems:'center'}}>
             <Text>Comments:</Text>
+            <Text>Write a comment:</Text>
+            <TextInput multiline={true} onChangeText={setComment} value={comment} placeholder={'place your comment here'}/>
+            <Button title={'Post Comment'}/>
             {/*Aqui seria a parte dos comentarios. Sugiro uma flatList ou algo parecido, e criar o componente Comment
               que seria renderizado pela flatlist. Lembrando que seria o crud, entao teria que haver como criar, editar e apagar comentarios
               , mas apenas se o comentario for do proprio usuario. bastaria checar se o id de usuario do comentario é compativel com o id do usuario logado
             */}
           </View>
-        </View>
+
+        </ScrollView>
       </Modal>
 
       <View style={[styles.item, {flex:0, height:'auto'}]}>
@@ -145,6 +177,15 @@ export default function Store({navigation, route}) {
     <SafeAreaView style={{flex:1}}>
       <ImageBackground source={require('../assets/book-library-with-open-textbook.jpg')} style={{flex:1}}>
         <View style={styles.tab}>
+        <Text 
+          onPress={()=>navigation.navigate('MyAccount')}
+          style={{
+            fontSize: 20,
+            color: "#555",
+            fontWeight: "normal",
+            alignSelf: "center",
+            textTransform: "uppercase"
+          }}>My Account</Text>
           <Text style={{
             fontSize: 24,
             color: "#0dd",
@@ -159,6 +200,11 @@ export default function Store({navigation, route}) {
             renderItem={BookSummary} 
             keyExtractor={(item) => item.id.toString()}
             extraData={id}/>
+          {isAdmin? <TouchableOpacity
+            onPress={()=>navigation.navigate('UploadBook')}
+            style={styles.uploadBookButton}>
+            <Icon name="plus"  size={30} color="#0dd" />
+          </TouchableOpacity>:null}
         </View>
       </ImageBackground>
     </SafeAreaView>
@@ -173,7 +219,7 @@ const styles = StyleSheet.create({
     marginBottom:10,
     width:'100%',
     backgroundColor:'#eee',
-    justifyContent:'space-evenly'
+    justifyContent:'space-around'
   },
   formContainer: {
     alignSelf:'center',

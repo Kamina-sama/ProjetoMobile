@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { beforeRemove } from '@react-navigation/core';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { useState, useEffect } from 'react';
@@ -11,16 +12,43 @@ export default function SignUp({navigation}) {
   const [email, setEmail]=useState('');
   const [password, setPassword]=useState('');
 
+  function clearFields() {
+    setName('');
+    setEmail('');
+    setPassword('');
+  }
+
+  function HandleValidation() {
+    if(name.length===0) {
+      Alert.alert('Erro','nome nao pode estar vazio!');
+      return;
+    }
+    if(!validateEmail(email)) {
+      Alert.alert('Erro','email inválido!');
+      return;
+    }
+    if(password.length<8) {
+      Alert.alert('Erro','senha precisa ter no minimo 8 caracteres!');
+      return;
+    }
+    else handleSignUp();
+  }
+
+  function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
   async function handleSignUp() {
     let users=await AsyncStorage.getItem('users');
-    if(users===null) users=JSON.stringify([{name:'admin', email:'admin@email.com', id:0, password:'admin'}]);
+    if(users===null) users=JSON.stringify([{name:'admin', email:'admin@email.com', id:0, password:'admin', profileImageData:null}]);
     users=JSON.parse(users);
 
-    const ID=await AsyncStorage.getItem('ID');
-    if(ID===null) ID=JSON.stringify({nextBookID:0, nextUserID:1});
+    let ID=await AsyncStorage.getItem('ID');
+    if(ID===null) ID=JSON.stringify({nextBookID:0, nextUserID:1, nextCommentID:0});
     ID=JSON.parse(ID);
 
-    let created_user={id:ID.nextUserID, name, email, password};
+    let created_user={id:ID.nextUserID, name, email, password, profileImageData:null};
 
     users.push(created_user);
     users=JSON.stringify(users);
@@ -33,6 +61,7 @@ export default function SignUp({navigation}) {
     ID=JSON.stringify(ID);
     await AsyncStorage.setItem('ID', ID);
     
+    clearFields();
     navigation.navigate('Store');
   }
 
@@ -61,13 +90,13 @@ export default function SignUp({navigation}) {
             placeholder={'Password'}/>
           <View style={styles.buttons}>
             <TouchableOpacity 
-              onPress={handleSignUp}
+              onPress={HandleValidation}
               style={styles.appButtonContainer}>
                 <Text style={styles.appButtonText}>Sign Up</Text>
             </TouchableOpacity>
           </View>
         </View>
-        <Text onPress={()=>navigation.navigate('Login')} style={styles.text}>Already have an account? click here to Login.</Text>
+        <Text onPress={()=>{clearFields(); navigation.navigate('Login')}} style={styles.text}>Already have an account? click here to Login.</Text>
       </ImageBackground>
     </SafeAreaView>
   );

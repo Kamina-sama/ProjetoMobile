@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { Alert, Image, Picker, Slider, ImageBackground, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Alert, Image, Picker, Slider, ImageBackground, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import * as ImagePicker from 'expo-image-picker';
 
@@ -16,6 +16,15 @@ export default function UploadBook({navigation, route}) {
   const [imageData, setImageData]=useState(null);
   const [author, setAuthor]=useState('');
   const [price, setPrice]=useState(10);
+
+  function ClearFields() {
+    setTitle('');
+    setGenre('Romance');
+    setSinopsis('');
+    setImageData(null);
+    setAuthor('');
+    setPrice(10);
+  }
 
   async function HandleFileSelect() {
     if (Platform.OS !== 'web') {
@@ -45,7 +54,7 @@ export default function UploadBook({navigation, route}) {
 
   async function HandleUpload() {
     let ID=await AsyncStorage.getItem('ID');
-    if(ID===null) ID=JSON.stringify({nextBookID:0, nextUserID:0});
+    if(ID===null) ID=JSON.stringify({nextBookID:0, nextUserID:0, nextCommentID:0});
     ID=JSON.parse(ID);
     console.log(ID.nextBookID);
     let newBook={id:ID.nextBookID, title, genre, price, sinopsis, coverImageData:imageData, author, comments:[]};
@@ -58,10 +67,12 @@ export default function UploadBook({navigation, route}) {
     ++ID.nextBookID;
     ID=JSON.stringify(ID);
     await AsyncStorage.setItem('ID',ID);
+    ClearFields();
     navigation.navigate('Store');
   }
   
   function handleGoBack() {
+    ClearFields();
     navigation.navigate('Store');
   }
 
