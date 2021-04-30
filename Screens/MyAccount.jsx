@@ -121,7 +121,7 @@ export default function MyAccount(props) {
         <ScrollView>
         <Image style={user.profileImageData==null? {maxHeight:'50%'}:{aspectRatio:user.profileImageData.width/user.profileImageData.height,width:'100%', maxHeight:'50%'}} source={user.profileImageData==null? genericProfilePictureSource:{uri:'data:image/jpeg;base64,'+user.profileImageData.base64}}/>
         <TouchableOpacity onPress={HandleFileSelect} style={styles.appButtonContainer}><Text>Change Profile Picture</Text></TouchableOpacity>
-        <TouchableOpacity onPress={()=>navigation.navigate('PaymentCardList')} style={styles.appButtonContainer}><Text>Manage Payment Options</Text></TouchableOpacity>
+        <TouchableOpacity onPress={()=>{}} style={styles.appButtonContainer}><Text>Manage Payment Options</Text></TouchableOpacity>
         <Text>Edit Name:</Text>
         <TextInput onChangeText={setName} value={name} placeholder={user.name}/>
         <Text>Edit Email:</Text>
