@@ -29,13 +29,13 @@ export const DetailedCard = ({route, navigation}) => {
         getCardListStore(setCardList);
         if (idProp === undefined) {
             const newCardBody = {
-                id: cardList.length + 1,
+                id: Math.random(),
                 name: name,
                 creditNumber: creditNumber,
                 creditValidate: validate,
             }
             let newArr = cardList;
-            newArr.push(newCardBody)
+            newArr.push(newCardBody);
             setCardListStore(newArr);
             navigation.navigate('PaymentCardList', {teste: "a"});
         } else {
