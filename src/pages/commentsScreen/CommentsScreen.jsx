@@ -42,7 +42,7 @@ export const CommentsScreen = (props) => {
             alert('O Comentario deve ter pelo menos 15 caracters!') 
         }else{
             alert('Adicionado comentário');
-          /* AsyncStorage.setItem('comentatios', JSON.stringify(comentarios.map(i => i))); */
+          AsyncStorage.setItem('comentatios', JSON.stringify(comentarios.map(i => i)));
         }
         
         let json = await AsyncStorage.getItem('comentatios');
