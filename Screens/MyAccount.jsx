@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, SafeAreaView, Image, View, Alert } from 'react-native';
 
 import * as ImagePicker from 'expo-image-picker';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const genericProfilePictureSource=require('../assets/blank-profile-picture-973460_640.png');
 
@@ -117,8 +118,10 @@ export default function MyAccount(props) {
               textTransform: "uppercase"
           }}>Store</Text>
         </View>
+        <ScrollView>
         <Image style={user.profileImageData==null? {maxHeight:'50%'}:{aspectRatio:user.profileImageData.width/user.profileImageData.height,width:'100%', maxHeight:'50%'}} source={user.profileImageData==null? genericProfilePictureSource:{uri:'data:image/jpeg;base64,'+user.profileImageData.base64}}/>
         <TouchableOpacity onPress={HandleFileSelect} style={styles.appButtonContainer}><Text>Change Profile Picture</Text></TouchableOpacity>
+        <TouchableOpacity onPress={()=>navigation.navigate('PaymentCardList')} style={styles.appButtonContainer}><Text>Manage Payment Options</Text></TouchableOpacity>
         <Text>Edit Name:</Text>
         <TextInput onChangeText={setName} value={name} placeholder={user.name}/>
         <Text>Edit Email:</Text>
@@ -129,6 +132,7 @@ export default function MyAccount(props) {
         <TouchableOpacity disabled={!somethingChanged} style={somethingChanged? styles.appButtonContainer: [styles.appButtonContainer, {backgroundColor:'#888'}]}><Text>Save Changes</Text></TouchableOpacity>
         <TouchableOpacity onPress={HandleLogOut} style={[styles.appButtonContainer, {backgroundColor:'#ffae42'}]}><Text>Log out</Text></TouchableOpacity>
         <TouchableOpacity onPress={createTwoButtonAlert} style={[styles.appButtonContainer,{backgroundColor:'#e05'}]}><Text>Delete Account</Text></TouchableOpacity>
+        </ScrollView>
     </SafeAreaView>
   );
 }
