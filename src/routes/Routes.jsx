@@ -7,6 +7,7 @@ import LoginScreen from '../pages/loginScreen/LoginScreen';
 import CadastroScreen from '../pages/cadastroScreen/CadastroScreen'
 import { BookStore } from '../pages/bookStore';
 import { BookDetail } from '../pages/bookDetails';
+import { CommentsScreen} from '../pages/commentsScreen';
 
 const Stack=createStackNavigator();
 
@@ -18,6 +19,7 @@ const Routes = ()=> {
         <Stack.Screen component={CadastroScreen} name='CadastroScreen'/>
         <Stack.Screen component={BookStore} name='BookStore'/>
         <Stack.Screen component={BookDetail} name='BookDetail'/>
+        <Stack.Screen component={CommentsScreen} name='CommentsScreen'/>
     </Stack.Navigator>
   );
 }
