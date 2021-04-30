@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { CustomInput } from '../../components/Input';
 import { PrimaryButton } from '../../components/PrimaryButton';
 import { CheckBox,Input } from 'react-native-elements';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View, AsyncStorage } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SecondaryButton } from '../../components/SecondaryButton';
-/* import  from '@react-native-community/async-storage' */
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export const CommentsScreen = (props) => {
@@ -44,6 +44,7 @@ export const CommentsScreen = (props) => {
         }else{
             alert('Adicionado comentário');
           AsyncStorage.setItem('comentatios', JSON.stringify(comentarios.map(i => i)));
+          setComentarios([comentario,...comentarios])
         }
         
         let json = await AsyncStorage.getItem('comentatios');
@@ -81,27 +82,30 @@ export const CommentsScreen = (props) => {
                 />
                 <PrimaryButton
                     onPress={()=> {
-                        setComentarios([comentario,...comentarios])
+                        
                         handleComemnt()
-                    }}
-                   
+                       
+                    }}                   
                 > 
                     Publicar 
                 </PrimaryButton>
 
-                <SecondaryButton 
+                {/* <SecondaryButton 
                     onPress={()=>props.navigation.navigate('BookDetails')}
-                    >Voltar</SecondaryButton>
+                    >Voltar</SecondaryButton> */}
                    
                 <View>
                     {comentarios.map((item,index)=>{
                         console.log(item)
                         return(
-                            <View key={index}> 
-                                <Text >Nome:{item.nome}</Text>
-                                <Text >Titulo:{item.titulo}</Text>
-                                <Text >Descrição:{item.descricao}</Text>
-                                <Text >Recomenda: {item.recomenda}</Text>
+                            <View key={index} style={{
+                                paddingTop: 20
+                            }}> 
+                                <Text style={{ fontSize: 15, fontWeight: 'bold'}}>Nome:{item.nome}</Text>
+                                <Text style={{ fontSize: 15, fontWeight: 'bold'}}>Titulo:{item.titulo}</Text>
+                                <Text style={{ fontSize: 15, fontWeight: 'bold'}}>Descrição:{item.descricao}</Text>
+                                <Text style={{ fontSize: 15, fontWeight: 'bold'}}>Recomenda: {item.recomenda === true ? 'Sim' : 'Não'}</Text>
+                                
                             </View>
                         )
                     })}
