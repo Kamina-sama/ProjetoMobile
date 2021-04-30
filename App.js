@@ -13,13 +13,16 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import DeleteAsync from './Screens/DeleteAsync';
 import CommentsScreen from './src/pages/commentsScreen/CommentsScreen'
-import MyAccount from './Screens/MyAccount';
+import PaymentCards from './src/pages/paymentCards';
+import { DetailedCard } from './src/pages/paymentCards/detailedCard';
+
 
 const Drawer = createDrawerNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
+
       <Drawer.Navigator initialRouteName={'SignUp'}>
         <Drawer.Screen name={'SignUp'} component={SignUp} options={{gestureEnabled:false}}/>
         <Drawer.Screen name={'Login'} component={Login} options={{gestureEnabled:false}}/>
@@ -29,6 +32,8 @@ export default function App() {
         <Drawer.Screen name={'Store'} component={Store}/>
         <Drawer.Screen name={'DeleteAsync'} component={DeleteAsync}/>
         <Drawer.Screen name={'CommentsScreen'} component={CommentsScreen}/>
+        <Drawer.Screen name={'PaymentCardList'} component={PaymentCards} />
+        <Drawer.Screen name={'DetailedCard'} component={DetailedCard} />
         <Drawer.Screen name={'MyAccount'} component={MyAccount} options={{gestureEnabled:false}}/>
       </Drawer.Navigator>
     </NavigationContainer>
