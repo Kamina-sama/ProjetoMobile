@@ -5,6 +5,7 @@
   <li>@jgsneves: JOÃO GABRIEL SANTOS NEVES, matrícula: 042191010;</li>
   <li>@danielmattosrs: DANIEL MATTOS DOS REIS SILVA, Matrícula: 312171018;</li>
   <li>@Kamina-sama: LEONARDO OLIVEIRA REIS, Matrícula: 144181029;</li>
+  <li>@jeda-i: JONATHAN EVANGELISTA DOS AFLITOS, Matrícula: 216171033;</li>
 </ul>
 
 <h2>Atribuições:</h2>
