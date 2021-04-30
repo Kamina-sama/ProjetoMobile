@@ -19,6 +19,11 @@ export const DetailedCard = ({route, navigation}) => {
         getCardListStore(setCardList);
     }, [route.params]);
 
+    function removeNonLettersInput (value){
+        return value.replace(/\D/g, "");
+    };
+    
+
 
     function handleSaveButtonPress() {
         getCardListStore(setCardList);
@@ -64,7 +69,10 @@ export const DetailedCard = ({route, navigation}) => {
             <Text style={styles.h2}>Número do cartao:</Text>
             <CustomInput 
                 value={creditNumber}
-                onChange={input => setCreditNumber(input)}
+                onChange={input => {
+                    const parseData = removeNonLettersInput(input);
+                    setCreditNumber(parseData);
+                }}
             />
             <Text style={styles.h2}>Validade do cartão:</Text>
             <CustomInput 
