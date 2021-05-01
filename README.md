@@ -20,5 +20,5 @@ Cada aluno ficou responsável por um CRUD.
 <ol>
   <li>João Gabriel Santos Neves: https://drive.google.com/file/d/1OV392l3f9Cb6BcYhaUdGm5CGP_ZRzSgq/view?usp=sharing </li>
   <li>Daniel Mattos dos Reis Silva: https://drive.google.com/file/d/11tssoJIt0ykncUuMUoMG7Ew1bYkMq23L/view?usp=sharing </li>
-  
+  <li>Leonardo Oliveira Reis: https://drive.google.com/file/d/12gz3UoRXYwZb3fEg4k3L4xgmStwxta6P/view?usp=sharing</li>
 </ol>
