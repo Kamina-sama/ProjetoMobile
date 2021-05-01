@@ -119,7 +119,6 @@ export default function Store({navigation, route}) {
             <View style={{flexDirection:'row'}}>
               <TouchableOpacity 
                 onPress={()=>{
-                  ClearFields();
                   navigation.navigate('EditBook',{book:item});
                 }}
                 style={styles.editButton}

@@ -28,6 +28,7 @@ export default function MyAccount(props) {
   function update() {
       getUser();
       setSomethingChanged(false);
+      if(user==null) return;
       if((name!=='' && name!==user.name) || (email!=='' && email!==user.email && validateEmail(email)) && (oldPassword==='' && newPassword==='')) setSomethingChanged(true);
       if(oldPassword===user.password && newPassword!==oldPassword && newPassword.length>=8) setSomethingChanged(true);
   }
@@ -76,6 +77,7 @@ export default function MyAccount(props) {
     users=JSON.stringify(users);
     await AsyncStorage.setItem('users', users);
     await AsyncStorage.removeItem('loggedUser');
+    setUser(null);
     navigation.navigate('SignUp');
   }
 
@@ -99,7 +101,7 @@ export default function MyAccount(props) {
     );
 
   return (
-    <SafeAreaView style={styles.topmost}>
+    user!==null? (<SafeAreaView style={styles.topmost}>
         <View style={styles.tab}>
         <Text style={{
             fontSize: 24,
@@ -118,7 +120,7 @@ export default function MyAccount(props) {
               textTransform: "uppercase"
           }}>Store</Text>
         </View>
-        <Image style={user.profileImageData==null? {maxHeight:'50%'}:{aspectRatio:user.profileImageData.width/user.profileImageData.height,width:'100%', maxHeight:'50%'}} source={user.profileImageData==null? genericProfilePictureSource:{uri:'data:image/jpeg;base64,'+user.profileImageData.base64}}/>
+        <Image style={user==null || user.profileImageData==null? {maxHeight:'50%'}:{aspectRatio:user.profileImageData.width/user.profileImageData.height,width:'100%', maxHeight:'50%'}} source={user.profileImageData==null? genericProfilePictureSource:{uri:'data:image/jpeg;base64,'+user.profileImageData.base64}}/>
         <TouchableOpacity onPress={HandleFileSelect} style={styles.appButtonContainer}><Text>Change Profile Picture</Text></TouchableOpacity>
         <Text>Edit Name:</Text>
         <TextInput onChangeText={setName} value={name} placeholder={user.name}/>
@@ -130,7 +132,7 @@ export default function MyAccount(props) {
         <TouchableOpacity disabled={!somethingChanged} style={somethingChanged? styles.appButtonContainer: [styles.appButtonContainer, {backgroundColor:'#888'}]}><Text>Save Changes</Text></TouchableOpacity>
         <TouchableOpacity onPress={HandleLogOut} style={[styles.appButtonContainer, {backgroundColor:'#ffae42'}]}><Text>Log out</Text></TouchableOpacity>
         <TouchableOpacity onPress={createTwoButtonAlert} style={[styles.appButtonContainer,{backgroundColor:'#e05'}]}><Text>Delete Account</Text></TouchableOpacity>
-    </SafeAreaView>
+    </SafeAreaView>):null
   );
 }
 
