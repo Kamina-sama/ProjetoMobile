@@ -17,10 +17,24 @@ Cada aluno ficou responsável por um CRUD.
   <li>Usuario (nao foi a designação original desta pessoa): Leonardo Oliveira Reis</li>
 </ol>
 
+<h2>Coisas que Leonardo fez:</h2>
+<ul>
+  <li>Tela de upload de livro</li>
+  <li>Tela da loja de livros</li>
+  <li>Tela de edição de livro</li>
+  <li>Modal de detalhes de livro</li>
+  <li>Tela de minha conta de usuario</li>
+  <li>Tela de cadastro de usuario</li>
+  <li>Tela de login</li>
+  <li>API REST com mockapi.io para ambas as entidades usuario e livro</li>
+  <li>Context API para usuario</li>
+</ul>
+
 <h2>Vídeos de apresentação:</h2>
 <ol>
   <li>João Gabriel Santos Neves: https://drive.google.com/file/d/1OV392l3f9Cb6BcYhaUdGm5CGP_ZRzSgq/view?usp=sharing </li>
   <li>Daniel Mattos dos Reis Silva: https://drive.google.com/file/d/11tssoJIt0ykncUuMUoMG7Ew1bYkMq23L/view?usp=sharing </li>
   <li>Jonathan Evangelista dos Aflitos: https://drive.google.com/file/d/1aPsvzEj0Wo48KSexWW0p7L3EfdoQ9Rwt/view?usp=sharing </li>
   <li>Leonardo Oliveira Reis: https://drive.google.com/file/d/12gz3UoRXYwZb3fEg4k3L4xgmStwxta6P/view?usp=sharing</li>
+  <li>Segundo video de Leonardo Oliveira Reis, mostrando o funcionamento da parte requisitada na N2: </li>
 </ol>
