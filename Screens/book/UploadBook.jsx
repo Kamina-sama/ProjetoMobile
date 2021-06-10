@@ -7,6 +7,8 @@ import * as ImagePicker from 'expo-image-picker';
 
 import Input from '../../src/components/Input';
 
+import Book from "../../Book";
+
 const generos=["Romance", "Comédia", "Biografia", "Aventura", "Drama", "Clássico"]
 
 export default function UploadBook({navigation, route}) {
@@ -54,7 +56,7 @@ export default function UploadBook({navigation, route}) {
   }
 
   async function HandleUpload() {
-    let ID=await AsyncStorage.getItem('ID');
+    /*let ID=await AsyncStorage.getItem('ID');
     if(ID===null) ID=JSON.stringify({nextBookID:0, nextUserID:0, nextCommentID:0});
     ID=JSON.parse(ID);
     console.log(ID.nextBookID);
@@ -68,6 +70,10 @@ export default function UploadBook({navigation, route}) {
     ++ID.nextBookID;
     ID=JSON.stringify(ID);
     await AsyncStorage.setItem('ID',ID);
+    ClearFields();
+    navigation.navigate('Store');*/
+    var book=new Book(title, sinopsis, author, genre, price, imageData);
+    await book.Create();
     ClearFields();
     navigation.navigate('Store');
   }

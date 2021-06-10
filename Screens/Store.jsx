@@ -1,14 +1,18 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
 import { SafeAreaView, ScrollView, Modal, ImageBackground, Image, Button, Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useFocusEffect } from '@react-navigation/native';
+import Book from "../Book";
+import { RefreshControl } from 'react-native';
+import {UserContext} from "../UserContext";
 
 const genericBookSource=require('../assets/generic-book.jpg');
 
 export default function Store({navigation, route}) {
+  const userContext=useContext(UserContext);
   const [loggedUser, setLoggedUser]=useState(null);
   const [id, setID]=useState(null);
   const [books, setBooks]=useState(null);
@@ -26,7 +30,7 @@ export default function Store({navigation, route}) {
   }
 
   async function HandlePostComment(book) {
-    if(comment==='') {
+    /*if(comment==='') {
       Alert.alert('Error','comment is empty!');
       return;
     }
@@ -40,34 +44,41 @@ export default function Store({navigation, route}) {
     else comments[userIndex]=newComment;
     books=JSON.stringify(books);
     AsyncStorage.setItem('books', books);
-    setComment('');
+    setComment('');*/
   }
 
-  useFocusEffect(React.useCallback(update, [books, loggedUser, refreshThingy]));
+  useFocusEffect(React.useCallback(update, [userContext.user])); //before it was loggedUser
 
   function update() {
     console.log('update');
     CheckIfAdmin();
-    getBooks();
-    setTimeout(()=>{setRefreshThingy(!refreshThingy)}, 1000);
+    Refresh();
+    //setTimeout(()=>{setRefreshThingy(!refreshThingy)}, 1000);
   }
 
   function CheckIfAdmin() {
-    console.log('checkIfAdmin');
+    /*console.log('checkIfAdmin');
     AsyncStorage.getItem('loggedUser',(error,result)=>{
       result=JSON.parse(result);
       if(result==null || loggedUser==null || loggedUser.id!==result.id) setLoggedUser(result);
-      if(result==null || result.id==undefined || result.id!==0) setIsAdmin(false);
+      if(result==null || result.id==undefined || result.id>1) setIsAdmin(false);
       else setIsAdmin(true);
-    });
+    });*/
+    if(userContext.user!==null && userContext.user.id<=1) setIsAdmin(true);
+    else setIsAdmin(false);
   }
 
   function getBooks() {
     console.log('getBooks');
-    AsyncStorage.getItem('books', (error, result)=>{
+    /*AsyncStorage.getItem('books', (error, result)=>{
       result=JSON.parse(result);
       if(JSON.stringify(result)!==JSON.stringify(books)) setBooks(result);
-    });
+    });*/
+    //Book.GetBooks().then(result=>setBooks(result));
+  }
+
+  function Refresh() {
+    Book.GetBooks().then(result=>setBooks(result));
   }
 
   function ChangeBookView(bookID) {
@@ -92,14 +103,18 @@ export default function Store({navigation, route}) {
     );
     
     async function HandleDeleteBook() {
-      let books=await AsyncStorage.getItem('books');
+      /*let books=await AsyncStorage.getItem('books');
       books=JSON.parse(books);
       const index=books.findIndex(book=>book.id===item.id);
       books.splice(index,1);
       ChangeBookView(item.id);
       setBooks(books);
       books=JSON.stringify(books);
-      await AsyncStorage.setItem('books',books);
+      await AsyncStorage.setItem('books',books);*/
+      var book=Book.Copy(item);
+      await book.Delete();
+      ChangeBookView(item.id);
+      Refresh();
     }
 
     return (
@@ -208,6 +223,7 @@ export default function Store({navigation, route}) {
             textTransform: "uppercase"
           }}>Store</Text>
         </View>
+        <Button title="Refresh" onPress={Refresh} />
         <View style={styles.formContainer}>
           <FlatList 
             data={books} 
@@ -299,7 +315,7 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     width:80,
     position: 'absolute',                                          
-    bottom: '12%',                                                    
+    bottom: '20%',                                                    
     right: '39%',
     height:80,
     backgroundColor:'#fff',

@@ -2,12 +2,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { beforeRemove } from '@react-navigation/core';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Alert, FlatList, ImageBackground, Pressable, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-
+import {UserContext} from "../UserContext";
 
 
 export default function SignUp({navigation}) {
+  const userContext=useContext(UserContext);
   const [name, setName]=useState('');
   const [email, setEmail]=useState('');
   const [password, setPassword]=useState('');
@@ -40,7 +41,7 @@ export default function SignUp({navigation}) {
 }
 
   async function handleSignUp() {
-    let users=await AsyncStorage.getItem('users');
+    /*let users=await AsyncStorage.getItem('users');
     if(users===null) users=JSON.stringify([{name:'admin', email:'admin@email.com', id:0, password:'admin', profileImageData:null}]);
     users=JSON.parse(users);
 
@@ -59,10 +60,13 @@ export default function SignUp({navigation}) {
 
     ++ID.nextUserID;
     ID=JSON.stringify(ID);
-    await AsyncStorage.setItem('ID', ID);
-    
-    clearFields();
-    navigation.navigate('Store');
+    await AsyncStorage.setItem('ID', ID);*/
+    var result=await userContext.signup(name, email, password);
+    if(result) {
+      clearFields();
+      navigation.navigate('Store');
+    }
+    else Alert.alert("Error:", "Couldnt signup for some reason...");
   }
 
   return (

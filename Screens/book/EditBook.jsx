@@ -7,6 +7,8 @@ import * as ImagePicker from 'expo-image-picker';
 
 import Input from '../../src/components/Input';
 
+import Book from "../../Book";
+
 const generos=["Romance", "Comédia", "Biografia", "Aventura", "Drama", "Clássico"]
 
 export default function EditBook({navigation, route}) {
@@ -49,13 +51,15 @@ export default function EditBook({navigation, route}) {
 
   //TODO: change this function to modify user original book:
   async function HandleUpload() {
-    let newBook={id:bookId, title, genre, sinopsis, coverImageData:imageData, price, author, comments};
+    /*let newBook={id:bookId, title, genre, sinopsis, coverImageData:imageData, price, author, comments};
     let books=await AsyncStorage.getItem('books');
     books=JSON.parse(books);
     const index=books.findIndex(book=>book.id===bookId);
     books[index]=newBook;
     books=JSON.stringify(books);
-    await AsyncStorage.setItem('books', books);
+    await AsyncStorage.setItem('books', books);*/
+    var book=new Book(title, sinopsis, author, genre, price, imageData, comments, bookId);
+    book.Update();
     ClearFields();
     navigation.navigate('Store');
   }

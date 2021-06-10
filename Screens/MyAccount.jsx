@@ -2,15 +2,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/core';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, SafeAreaView, Image, View, Alert } from 'react-native';
 
 import * as ImagePicker from 'expo-image-picker';
 import { ScrollView } from 'react-native-gesture-handler';
+import {UserContext} from "../UserContext";
 
 const genericProfilePictureSource=require('../assets/blank-profile-picture-973460_640.png');
 
 export default function MyAccount(props) {
+  const userContext=useContext(UserContext);
   const [user,setUser]=useState('');
   const [somethingChanged, setSomethingChanged]=useState(false);
   const navigation=props.navigation;
@@ -34,10 +36,12 @@ export default function MyAccount(props) {
   }
 
   function getUser() {
-    AsyncStorage.getItem('loggedUser',(error, result)=>{
+    /*AsyncStorage.getItem('loggedUser',(error, result)=>{
         result=JSON.parse(result);
         setUser(result);
     });
+    */
+    setUser(userContext.user);
   }
 
   useFocusEffect(update);
@@ -70,19 +74,22 @@ export default function MyAccount(props) {
   }
 
   async function HandleDeleteAccount() {
-    let users=await AsyncStorage.getItem('users');
-    users=JSON.parse(users);
-    const index=users.findIndex(u=>u.id===user.id);
-    users.splice(index,1);
-    users=JSON.stringify(users);
-    await AsyncStorage.setItem('users', users);
-    await AsyncStorage.removeItem('loggedUser');
-    setUser(null);
-    navigation.navigate('SignUp');
+    //let users=await AsyncStorage.getItem('users');
+    //users=JSON.parse(users);
+    //const index=users.findIndex(u=>u.id===user.id);
+    //users.splice(index,1);
+    //users=JSON.stringify(users);
+    //await AsyncStorage.setItem('users', users);
+    //await AsyncStorage.removeItem('loggedUser');
+    //setUser(null);
+    var result=await userContext.deleteAccount();
+    if(result) navigation.navigate('SignUp');
+    else Alert.alert("Error:", "Coundlt delete acount for some reason...");
   }
 
   async function HandleLogOut() {
-      await AsyncStorage.removeItem('loggedUser');
+      //await AsyncStorage.removeItem('loggedUser');
+      userContext.logout();
       navigation.navigate('Login');
   }
 

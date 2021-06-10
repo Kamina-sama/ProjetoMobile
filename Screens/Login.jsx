@@ -1,11 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
 import { Alert, FlatList, ImageBackground, Pressable, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-
+import {UserContext} from "../UserContext";
 
 export default function Login(props) {
+  const userContext=useContext(UserContext);
   const {navigation}=props;
   const [field, setField]=useState('');
   const [password, setPassword]=useState('');
@@ -16,7 +17,7 @@ export default function Login(props) {
   }
 
   async function handleLogin() {
-    let users=await AsyncStorage.getItem('users');
+    /*let users=await AsyncStorage.getItem('users');
     if(users===null) users=JSON.stringify([{name:'admin', id:0, email:'admin@email.com', password:'admin', profileImageData:null}]) 
     users=JSON.parse(users);
     let desired_user=null;
@@ -33,6 +34,15 @@ export default function Login(props) {
       //Seria legal mostrar um texto em vermelho dizendo que a senha ou o nome estao errados,
       //mas isso é de menos
       Alert.alert('User not found', 'please check if the fields are correct and try again');
+    }*/
+    var result=await userContext.login(field, password);
+    if(result!==null) {
+      clearFields();
+      props.navigation.navigate('Store');
+    }
+    else {
+      userContext.logout();
+      Alert.alert("Error:", "Couldn't find user, please check the fields");
     }
   }
 
