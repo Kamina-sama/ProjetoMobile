@@ -73,9 +73,14 @@ export default function UploadBook({navigation, route}) {
     ClearFields();
     navigation.navigate('Store');*/
     var book=new Book(title, sinopsis, author, genre, price, imageData);
-    await book.Create();
-    ClearFields();
-    navigation.navigate('Store');
+    var result=await book.Create();
+    if(result) {
+      ClearFields();
+      navigation.navigate('Store');
+    }
+    else {
+      Alert.alert("Error:","Couldn't upload the book for some reason...");
+    }
   }
   
   function handleGoBack() {

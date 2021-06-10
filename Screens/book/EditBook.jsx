@@ -59,9 +59,14 @@ export default function EditBook({navigation, route}) {
     books=JSON.stringify(books);
     await AsyncStorage.setItem('books', books);*/
     var book=new Book(title, sinopsis, author, genre, price, imageData, comments, bookId);
-    book.Update();
-    ClearFields();
-    navigation.navigate('Store');
+    var result=await book.Update();
+    if(result) {
+      ClearFields();
+      navigation.navigate('Store');
+    }
+    else {
+      Alert.alert("Error:", "Couldn't Save the edits to the book...");
+    }
   }
 
   async function HandleValidation() {

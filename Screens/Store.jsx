@@ -78,7 +78,7 @@ export default function Store({navigation, route}) {
   }
 
   function Refresh() {
-    Book.GetBooks().then(result=>setBooks(result));
+    Book.GetBooks().then(result=>setBooks(result), (reason)=>{Alert.alert("Error:","Couldn't get the books from server...");});
   }
 
   function ChangeBookView(bookID) {
@@ -112,9 +112,14 @@ export default function Store({navigation, route}) {
       books=JSON.stringify(books);
       await AsyncStorage.setItem('books',books);*/
       var book=Book.Copy(item);
-      await book.Delete();
-      ChangeBookView(item.id);
-      Refresh();
+      var result=await book.Delete();
+      if(result) {
+        ChangeBookView(item.id);
+        Refresh();
+      }
+      else {
+        Alert.alert("Error:","Couldn't delete the book");
+      }
     }
 
     return (
