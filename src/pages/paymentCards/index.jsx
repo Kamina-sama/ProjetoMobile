@@ -1,16 +1,17 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { PaymentCard } from '../../components/PaymentCard';
 import { PrimaryButton } from '../../components/PrimaryButton';
 import { SecondaryButton } from '../../components/SecondaryButton';
-import { getCardListStore, setCardListStore } from './helper';
+import { paymentCardContext } from '../../context/PaymentCardsContext';
 
 export default function PaymentCards({route, navigation}) {
-    const [cardList, setCardList] = useState([]);
-
+    const { getPaymentCardList, setPaymentCardList } = useContext(paymentCardContext);
+    let paymentCardList = [];
+    
     useEffect(() => {
-        getCardListStore(setCardList);
+        paymentCardList = getPaymentCardList();
     }, [route.params]);
     
     return(
@@ -25,9 +26,8 @@ export default function PaymentCards({route, navigation}) {
                     <Text
                         style={styles.deleteDiv}
                         onPress={() => {
-                            const newArr = cardList.filter(newItem => item.id !== newItem.id);
-                            setCardListStore(newArr);
-                            getCardListStore(setCardList);
+                            const newArr = paymentCardList.filter(newItem => item.id !== newItem.id);
+                            setPaymentCardList(newArr);
                         }}
                     >Apagar</Text>
                 </View>

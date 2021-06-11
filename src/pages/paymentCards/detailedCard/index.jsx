@@ -1,22 +1,23 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { Image, SafeAreaView, StyleSheet, Text } from 'react-native';
 import { CustomInput } from '../../../components/Input';
 import { PrimaryButton } from '../../../components/PrimaryButton';
 import { SecondaryButton } from '../../../components/SecondaryButton';
-import { getCardListStore, setCardListStore } from '../helper';
+import { paymentCardContext } from '../../../context/PaymentCardsContext';
 
 export const DetailedCard = ({route, navigation}) => {
     const {creditNameProp, creditNumberProp, validateProp, idProp} = route.params;
+    const {getPaymentCardList, setPaymentCardList} = useContext(paymentCardContext);
     const [name, setName] = useState("");
     const [creditNumber, setCreditNumber] = useState("");
     const [validate, setValidate] = useState("");
-    const [cardList, setCardList] = useState([]);
+    let cardList = [];
     
     useEffect(() => {
         setName(JSON.stringify(creditNameProp).replaceAll(`"`,""));
         setCreditNumber(JSON.stringify(creditNumberProp).replaceAll(`"`,""));
         setValidate(JSON.stringify(validateProp).replaceAll(`"`,""));
-        getCardListStore(setCardList);
+        cardList = getPaymentCardList();
     }, [route.params]);
 
     function removeNonLettersInput (value){
@@ -26,7 +27,7 @@ export const DetailedCard = ({route, navigation}) => {
 
 
     function handleSaveButtonPress() {
-        getCardListStore(setCardList);
+        cardList = getPaymentCardList();
         if (idProp === undefined) {
             const newCardBody = {
                 id: Math.random(),
@@ -36,7 +37,7 @@ export const DetailedCard = ({route, navigation}) => {
             }
             let newArr = cardList;
             newArr.push(newCardBody);
-            setCardListStore(newArr);
+            setPaymentCardList(newArr);
             navigation.navigate('PaymentCardList', {teste: "a"});
         } else {
             const filteredArray = cardList.filter(item => item.id !== idProp);
@@ -47,7 +48,7 @@ export const DetailedCard = ({route, navigation}) => {
                 creditValidate: validate,
             }
             filteredArray.push(newCardBody);
-            setCardListStore(filteredArray);
+            setPaymentCardList(filteredArray);
             navigation.navigate('PaymentCardList', {teste: "a"})
         }
     }
