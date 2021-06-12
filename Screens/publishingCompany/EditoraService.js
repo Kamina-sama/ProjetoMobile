@@ -7,65 +7,27 @@ var instance = axios.create({
   });
 
 export default class EditoraService {
-
-    id;
-    nome;
-    endereco;
-    telefone;
-    email;
-
-    setData(nome,cnpj,endereco,telefone,email) {
-        this.nome = nome;
-        this.id = cnpj;
-        this.endereco = endereco;
-        this.telefone = telefone;
-        this.email = email;
-    }
-    static Copy(editoraService) {
-        return new EditoraService(
-            editoraService.nome,
-            editoraService.cnpj,
-            editoraService.endereco,
-            editoraService.telefone,
-            editoraService.email
-        );
-    }
-
-    Create = async () => {
-        var {status}=await instance.post("editora", 
-        {
-            id:this.id,
-            nome:this.nome,
-            endereco:this.endereco,
-            telefone:this.telefone,
-            email:this.email,
-        });
+    Create = async (data) => {
+        var {status}=await instance.post("editora", data);
         if(status>=200 && status <=299) return true;
         return false;
     }
-    Delete = async () => {
-        var {status}=await instance.delete("editora/"+this.id);
+    Delete = async (id) => {
+        var {status}=await instance.delete("editora/"+id);
         if(status>=200 && status <=299) return true;
         return false;
     }
-    Update = async () => {
-        var {status}=await instance.put("editora/"+this.id, 
-        {
-            id:this.id,
-            nome:this.nome,
-            endereco:this.endereco,
-            telefone:this.telefone,
-            email:this.email,
-        });
+    Update = async (id,data) => {
+        var {status}=await instance.put("editora/"+id, data);
         if(status>=200 && status <=299) return true;
         return false;
     }
-    static async GetByID(id) {
-        var {data}=await instance.get("editora?id="+id);
+    GetByID = async(id) => {
+        var {data}=await instance.get("editora/"+id);
         if(data.length>0) return data[0];
         return null;
     }
-    static async GetEditoras() {
+    GetEditoras = async() => {
         var {data}=await instance.get("editora");
         return data;
     }

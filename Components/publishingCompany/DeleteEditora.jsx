@@ -13,7 +13,7 @@ const DeleteEditora = (props) => {
     const { isOpen, closeModal, selectedEditora } = props;
 
     const deleteEditora = () => {
-      props.deleteEditora(props.selectedEditora.cnpj);
+      props.deleteEditora(props.selectedEditora.id);
       props.closeModal();
     }
 

@@ -7,6 +7,7 @@ import AddEditora from '../../Components/publishingCompany/CreateEditora';
 import DeleteEditora from '../../Components/publishingCompany/DeleteEditora';
 import EditarEditora from '../../Components/publishingCompany/EditarEditora';
 import EditoraService from './EditoraService';
+import { ActivityIndicator } from 'react-native';
 
 const editoraStorage = new EditoraStorage();
 const editoraService = new EditoraService();
@@ -17,11 +18,11 @@ const Editora = (props) => {
     const [isDeleteEditoraModalOpen, setIsDeleteEditoraModalOpen] = useState(false);
     const [isEditarEditoraModalOpen, setIsEditarEditoraModalOpen] = useState(false);
     const [selectedEditora, setSelectedEditora] = useState(false);
+    const [isLoading, setLoading] = useState(true);
 
     const addEditora = (data) => {
       //const resultado= editoraStorage.storeData(JSON.stringify(data), data.cnpj);
-      editoraService.setData(data);
-      const resultado = editoraService.Create();
+      const resultado = editoraService.Create(data);
       if(resultado){
           Alert.alert("Sucesso","Editora cadastrada com sucesso");
           /*editoraStorage.getData(editora.cnpj).then(result => {
@@ -35,8 +36,7 @@ const Editora = (props) => {
 
     const updateEditora = (data) => {
       //const resultado = editoraStorage.storeData(JSON.stringify(data), data.cnpj);
-      editoraService.setData(data);
-      const resultado = editoraService.Update();
+      const resultado = editoraService.Update(data.id, data);
         if(resultado){
           Alert.alert("Sucesso","Editora atualizada com sucesso");
           /*editoraStorage.getData(editora.cnpj).then(result => {
@@ -49,11 +49,19 @@ const Editora = (props) => {
     
     }
   
-    const deleteEditora = cnpj => {
-      editoraStorage.removeItem(cnpj);
-      setEditora(editora.filter(edit => edit.cnpj !== cnpj));
+    const deleteEditora = id => {
+      var resultado = editoraService.Delete(id);
+      if(resultado){
+        setEditora(editora.filter(edit => edit.id !== id));
+        Alert.alert("Sucesso","Editora removida com sucesso.");
+      }
     }
 
+    const loading = () => (
+      <View style={styles.loading}>
+        <ActivityIndicator size='large' color="#0000ff" />
+      </View>
+    )
 
     const toggleAddEditora = () => {
       setIsAddEditoraModalOpen(!isAddEditoraModalOpen)
@@ -68,8 +76,15 @@ const Editora = (props) => {
     }
 
     useEffect(() => {
-      let editoras = EditoraService.GetEditoras();
-      Alert.alert("Editora",JSON.stringify(editoras));
+      setLoading(true);
+      editoraService.GetEditoras().then(value =>{
+        setEditora(value);
+        setLoading(false);
+      }, (err)=> {
+        console.log(err);
+        setLoading(false);
+        Alert.alert('Erro','Houve um erro verifique com administrador do sistema.');
+      });
         /*editoraStorage.getAllKeys()
             .then(keys => {
                 editoraStorage.multiGet(keys)
@@ -81,10 +96,11 @@ const Editora = (props) => {
                         }
                     });
             });*/
-    },[]);
+    },[JSON.stringify(editora)]);
 
     return (
-      <ScrollView>
+      <ScrollView style={styles.scllview}>
+        {isLoading && loading()}
         <View style={styles.container}>
             <View >
                 <Text style={styles.title}>Lista de editoras:</Text>
@@ -97,8 +113,8 @@ const Editora = (props) => {
                   </TouchableOpacity>
                 </View>
             </View>
-            {editora.map( (data, index) =>
-              <View style={styles.EditoraListContainer}>
+            {!isLoading &&editora.map( (data, index) =>
+              <View style={styles.editoraListContainer} key={index}>
                 <Text style={styles.name}>{data.nome}</Text>
                 <Text style={styles.listItem}>Endereço: {data.endereco}</Text>
                 <Text style={styles.listItem}>Telefone: {data.telefone}</Text>
@@ -195,8 +211,23 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderTopWidth: 1,
     borderColor: "rgba(0,0,0,0.1)",
-    width: '100%'
+    width: '100%',
   },
+  scllview:{
+    marginTop:"10%"
+  },
+  loading:{
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    opacity: 0.5,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 9999999
+  }
 });
 
 export default Editora;

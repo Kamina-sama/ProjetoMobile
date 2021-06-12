@@ -6,11 +6,13 @@ import {
     Text,
     TextInput,
     StyleSheet,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from 'react-native';
 
 const EditarEditora = (props) => {
     const initialEditoraState = {
+        id: "",
         nome: "",
         cnpj: "",
         endereco: "",
@@ -24,6 +26,7 @@ const EditarEditora = (props) => {
     useEffect(() => {
         // state value is updated by selected employee data
         const data = {
+            id: props.selectedEditora.id,
             nome: props.selectedEditora.nome,
             cnpj: props.selectedEditora.cnpj,
             endereco: props.selectedEditora.endereco,
@@ -37,8 +40,17 @@ const EditarEditora = (props) => {
         setEditora({ ...editora, [name]: value });
     }
 
+    const validation = () => {
+        if(editora.nome == "" || editora.cnpj == "" || editora.endereco == "" || editora.telefone == "" || editora.email == ""){
+            Alert.alert("Erro!","O todos os campos são de preenchimento obrigatório.");
+        }else{
+            updateEditora();
+        }
+    }
+
     const updateEditora = () => {
         props.updateEditora({
+            id: editora.id,
             nome: editora.nome,
             cnpj: editora.cnpj,
             endereco: editora.endereco,
@@ -98,7 +110,7 @@ const EditarEditora = (props) => {
                 
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
-                        onPress={updateEditora}
+                        onPress={validation}
                         style={{ ...styles.button, marginVertical: 0 }}>
                         <Text style={styles.buttonText}>Atualizar</Text>
                     </TouchableOpacity>

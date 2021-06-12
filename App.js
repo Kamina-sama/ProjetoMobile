@@ -17,6 +17,7 @@ import PaymentCards from './src/pages/paymentCards';
 import { DetailedCard } from './src/pages/paymentCards/detailedCard';
 import MyAccount from './Screens/MyAccount'
 import {UserContextComponent} from "./UserContext";
+import { PaymentCardProvider } from './src/context/PaymentCardsContext';
 
 const Drawer = createDrawerNavigator();
 

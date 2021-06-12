@@ -20,7 +20,7 @@ const CreateEditora = (props) => {
     }
 
     const validation = () => {
-        if(editora.nome == "" || editora.nome == "" || editora.nome == "" || editora.nome == "" || editora.nome == ""){
+        if(editora.nome == "" || editora.cnpj == "" || editora.endereco == "" || editora.telefone == "" || editora.email == ""){
             Alert.alert("Erro!","O campo '"+ name +"' é de preenchimento obrigatório.");
         }else{
             cadastrarEditora();
