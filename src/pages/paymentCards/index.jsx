@@ -7,7 +7,7 @@ import { SecondaryButton } from '../../components/SecondaryButton';
 import { paymentCardContext } from '../../context/PaymentCardsContext';
 
 export default function PaymentCards({route, navigation}) {
-    const { getPaymentCardList, setPaymentCardList } = useContext(paymentCardContext);
+    const { getPaymentCardList, deletePaymentCard } = useContext(paymentCardContext);
     let paymentCardList = [];
     
     useEffect(() => {
@@ -17,7 +17,7 @@ export default function PaymentCards({route, navigation}) {
     return(
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>Cartões de Pagamento</Text>
-            {cardList.map(item => (
+            {paymentCardList.map(item => (
                 <View style={styles.paymentCardView} key={item.id}>
                     <PaymentCard
                         {...item}
@@ -25,10 +25,7 @@ export default function PaymentCards({route, navigation}) {
                     />
                     <Text
                         style={styles.deleteDiv}
-                        onPress={() => {
-                            const newArr = paymentCardList.filter(newItem => item.id !== newItem.id);
-                            setPaymentCardList(newArr);
-                        }}
+                        onPress={() => deletePaymentCard(item.id)}
                     >Apagar</Text>
                 </View>
             ))}
