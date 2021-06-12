@@ -10,10 +10,10 @@ export const PaymentCardProvider = ({children}) => {
 
     const getPaymentCardList = () => paymentCardList;
 
-    const setPaymentCardList = (newArr) => setPaymentCardList(newArr);
+    const setPaymentCardList1 = (newArr) => setPaymentCardList(newArr);
 
     return (
-        <paymentCardContext.Provider value={{getPaymentCardList, setPaymentCardList}}>
+        <paymentCardContext.Provider value={{getPaymentCardList, setPaymentCardList1}}>
             {children}
         </paymentCardContext.Provider>
     );

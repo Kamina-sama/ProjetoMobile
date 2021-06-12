@@ -6,8 +6,10 @@ import EditoraStorage from './EditoraStuff';
 import AddEditora from '../../Components/publishingCompany/CreateEditora';
 import DeleteEditora from '../../Components/publishingCompany/DeleteEditora';
 import EditarEditora from '../../Components/publishingCompany/EditarEditora';
+import EditoraService from './EditoraService';
 
 const editoraStorage = new EditoraStorage();
+const editoraService = new EditoraService();
 
 const Editora = (props) => {
     const [editora, setEditora]=useState([]);
@@ -17,7 +19,9 @@ const Editora = (props) => {
     const [selectedEditora, setSelectedEditora] = useState(false);
 
     const addEditora = (data) => {
-      const resultado= editoraStorage.storeData(JSON.stringify(data), data.cnpj);
+      //const resultado= editoraStorage.storeData(JSON.stringify(data), data.cnpj);
+      editoraService.setData(data);
+      const resultado = editoraService.Create();
       if(resultado){
           Alert.alert("Sucesso","Editora cadastrada com sucesso");
           /*editoraStorage.getData(editora.cnpj).then(result => {
@@ -30,7 +34,9 @@ const Editora = (props) => {
     }
 
     const updateEditora = (data) => {
-      const resultado = editoraStorage.storeData(JSON.stringify(data), data.cnpj)
+      //const resultado = editoraStorage.storeData(JSON.stringify(data), data.cnpj);
+      editoraService.setData(data);
+      const resultado = editoraService.Update();
         if(resultado){
           Alert.alert("Sucesso","Editora atualizada com sucesso");
           /*editoraStorage.getData(editora.cnpj).then(result => {
@@ -62,7 +68,9 @@ const Editora = (props) => {
     }
 
     useEffect(() => {
-        editoraStorage.getAllKeys()
+      let editoras = EditoraService.GetEditoras();
+      Alert.alert("Editora",JSON.stringify(editoras));
+        /*editoraStorage.getAllKeys()
             .then(keys => {
                 editoraStorage.multiGet(keys)
                     .then(data => {
@@ -72,7 +80,7 @@ const Editora = (props) => {
                           rows.push(data[i]);
                         }
                     });
-            });
+            });*/
     },[]);
 
     return (
