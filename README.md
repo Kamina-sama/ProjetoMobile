@@ -37,4 +37,5 @@ Cada aluno ficou responsável por um CRUD.
   <li>Jonathan Evangelista dos Aflitos: https://drive.google.com/file/d/1aPsvzEj0Wo48KSexWW0p7L3EfdoQ9Rwt/view?usp=sharing </li>
   <li>Leonardo Oliveira Reis: https://drive.google.com/file/d/12gz3UoRXYwZb3fEg4k3L4xgmStwxta6P/view?usp=sharing</li>
   <li>Segundo video de Leonardo Oliveira Reis, mostrando o funcionamento da parte requisitada na N2: https://drive.google.com/file/d/1k3dkB_3kLF7inv2LMjhSCuYsHvTM1wbV/view?usp=sharing</li>
+  <li>Segundo vídeo de João Gabriel Santos Neves, mostrando a context api e consumindo API no json-server: https://drive.google.com/file/d/1nOf7tSVp9ymWeM9PsuEWvMFZJwD5qwBW/view?usp=sharing </li>
 </ol>

@@ -7,7 +7,11 @@ import { paymentCardContext } from '../../../context/PaymentCardsContext';
 
 export const DetailedCard = ({route, navigation}) => {
     const {creditNameProp, creditNumberProp, validateProp, idProp} = route.params;
-    const {getPaymentCardList, setPaymentCardList} = useContext(paymentCardContext);
+    const {
+        getPaymentCardList, 
+        createPaymentCard, 
+        editPaymentCard
+    } = useContext(paymentCardContext);
     const [name, setName] = useState("");
     const [creditNumber, setCreditNumber] = useState("");
     const [validate, setValidate] = useState("");
@@ -35,20 +39,16 @@ export const DetailedCard = ({route, navigation}) => {
                 creditNumber: creditNumber,
                 creditValidate: validate,
             }
-            let newArr = cardList;
-            newArr.push(newCardBody);
-            setPaymentCardList(newArr);
+            createPaymentCard(newArr);
             navigation.navigate('PaymentCardList', {teste: "a"});
         } else {
-            const filteredArray = cardList.filter(item => item.id !== idProp);
             const newCardBody = {
                 id: filteredArray.length + 1,
                 name: name,
                 creditNumber: creditNumber,
                 creditValidate: validate,
             }
-            filteredArray.push(newCardBody);
-            setPaymentCardList(filteredArray);
+            editPaymentCard(newCardBody);
             navigation.navigate('PaymentCardList', {teste: "a"})
         }
     }
