@@ -1,23 +1,23 @@
 import 'react-native-gesture-handler';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert,ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import EditoraStorage from './EditoraStuff';
 import AddEditora from '../../Components/publishingCompany/CreateEditora';
 import DeleteEditora from '../../Components/publishingCompany/DeleteEditora';
 import EditarEditora from '../../Components/publishingCompany/EditarEditora';
 import EditoraService from './EditoraService';
-import { ActivityIndicator } from 'react-native';
+import { EditoraContext } from '../../src/context/PublishingCompanyContext';
 
-const editoraStorage = new EditoraStorage();
+
 const editoraService = new EditoraService();
 
 const Editora = (props) => {
-    const [editora, setEditora]=useState([]);
+    const [editoras, setEditoras]=useState([]);
     const [isAddEditoraModalOpen, setIsAddEditoraModalOpen] = useState(false);
     const [isDeleteEditoraModalOpen, setIsDeleteEditoraModalOpen] = useState(false);
     const [isEditarEditoraModalOpen, setIsEditarEditoraModalOpen] = useState(false);
-    const [selectedEditora, setSelectedEditora] = useState(false);
+    //const [selectedEditora, setSelectedEditora] = useState(false);
+    const [editora, setEditora] = useContext(EditoraContext);
     const [isLoading, setLoading] = useState(true);
 
     const addEditora = (data) => {
@@ -25,24 +25,24 @@ const Editora = (props) => {
       const resultado = editoraService.Create(data);
       if(resultado){
           Alert.alert("Sucesso","Editora cadastrada com sucesso");
-          /*editoraStorage.getData(editora.cnpj).then(result => {
+          /*editoraStorage.getData(editoras.cnpj).then(result => {
               Alert.alert("Dados cadastrados", JSON.stringify(result));
           });*/
-          setEditora([data, ...editora]);
+          setEditoras([data, ...editoras]);
       }else{
           Alert.alert("Erro", "Houve erro ao cadastrar a editora.\n\n\n"+resultado);
       }
     }
 
-    const updateEditora = (data) => {
+    const updateEditora = (id,data) => {
       //const resultado = editoraStorage.storeData(JSON.stringify(data), data.cnpj);
-      const resultado = editoraService.Update(data.id, data);
+      const resultado = editoraService.Update(id, data);
         if(resultado){
           Alert.alert("Sucesso","Editora atualizada com sucesso");
-          /*editoraStorage.getData(editora.cnpj).then(result => {
+          /*editoraStorage.getData(editoras.cnpj).then(result => {
               Alert.alert("Dados cadastrados", JSON.stringify(result));
           });*/
-          setEditora(editora.map(edit => edit.cnpj == data.cnpj ? data : edit) );
+          setEditoras(editoras.map(edit => edit.cnpj == data.cnpj ? data : edit) );
       }else{
           Alert.alert("Erro", "Houve erro ao atualizar a editora.\n\n\n"+resultado);
       }
@@ -52,7 +52,7 @@ const Editora = (props) => {
     const deleteEditora = id => {
       var resultado = editoraService.Delete(id);
       if(resultado){
-        setEditora(editora.filter(edit => edit.id !== id));
+        setEditoras(editoras.filter(edit => edit.id !== id));
         Alert.alert("Sucesso","Editora removida com sucesso.");
       }
     }
@@ -78,7 +78,7 @@ const Editora = (props) => {
     useEffect(() => {
       setLoading(true);
       editoraService.GetEditoras().then(value =>{
-        setEditora(value);
+        setEditoras(value);
         setLoading(false);
       }, (err)=> {
         console.log(err);
@@ -89,14 +89,14 @@ const Editora = (props) => {
             .then(keys => {
                 editoraStorage.multiGet(keys)
                     .then(data => {
-                        setEditora(data);
+                        setEditoras(data);
                         Alert.alert("Editora",JSON.stringify(data));
                         for (let i = 0; i < data.length; i++) {
                           rows.push(data[i]);
                         }
                     });
             });*/
-    },[JSON.stringify(editora)]);
+    },[JSON.stringify(editoras)]);
 
     return (
       <ScrollView style={styles.scllview}>
@@ -113,7 +113,7 @@ const Editora = (props) => {
                   </TouchableOpacity>
                 </View>
             </View>
-            {!isLoading &&editora.map( (data, index) =>
+            {!isLoading &&editoras.map( (data, index) =>
               <View style={styles.editoraListContainer} key={index}>
                 <Text style={styles.name}>{data.nome}</Text>
                 <Text style={styles.listItem}>Endereço: {data.endereco}</Text>
@@ -124,7 +124,7 @@ const Editora = (props) => {
                   <TouchableOpacity
                     onPress={() => {
                       toggleEditarEditoraModal();
-                      setSelectedEditora(data)
+                      setEditora(data)
                     }}
                     style={{ ...styles.button, marginVertical: 0 }}>
                     <Text style={styles.buttonText}>Editar</Text>
@@ -133,7 +133,7 @@ const Editora = (props) => {
                   <TouchableOpacity
                     onPress={() => {
                       toggleDeleteEditoraModal();
-                      setSelectedEditora(data)
+                      setEditora(data)
                     }}
                     style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
                     <Text style={styles.buttonText}>Delete</Text>
@@ -153,14 +153,12 @@ const Editora = (props) => {
           {isEditarEditoraModalOpen ? <EditarEditora
             isOpen={isEditarEditoraModalOpen}
             closeModal={toggleEditarEditoraModal}
-            selectedEditora={selectedEditora}
             updateEditora={updateEditora}
           /> : null}
 
           {isDeleteEditoraModalOpen ? <DeleteEditora
             isOpen={isDeleteEditoraModalOpen}
             closeModal={toggleDeleteEditoraModal}
-            selectedEditora={selectedEditora}
             deleteEditora={deleteEditora}
           /> : null}
 
@@ -214,7 +212,8 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   scllview:{
-    marginTop:"10%"
+    marginTop:"10%",
+    flex:1
   },
   loading:{
     position: 'absolute',

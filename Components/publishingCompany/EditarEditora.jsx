@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-
+import React, { useContext } from 'react';
 import {
     Modal,
     View,
@@ -9,32 +8,12 @@ import {
     TouchableOpacity,
     Alert
 } from 'react-native';
+import { EditoraContext } from '../../src/context/PublishingCompanyContext';
 
 const EditarEditora = (props) => {
-    const initialEditoraState = {
-        id: "",
-        nome: "",
-        cnpj: "",
-        endereco: "",
-        telefone:"",
-        email: ""
-      };
-
-    const [editora, setEditora] = useState(initialEditoraState);
+    //const [editora, setEditora] = useState(initialEditoraState);
     const { isOpen, closeModal } = props;
-
-    useEffect(() => {
-        // state value is updated by selected employee data
-        const data = {
-            id: props.selectedEditora.id,
-            nome: props.selectedEditora.nome,
-            cnpj: props.selectedEditora.cnpj,
-            endereco: props.selectedEditora.endereco,
-            telefone: props.selectedEditora.telefone,
-            email: props.selectedEditora.email
-          };
-        setEditora(data)
-    }, [])
+    const [editora, setEditora] = useContext(EditoraContext);
 
     const handleChange = (value, name) => {
         setEditora({ ...editora, [name]: value });
@@ -49,14 +28,7 @@ const EditarEditora = (props) => {
     }
 
     const updateEditora = () => {
-        props.updateEditora({
-            id: editora.id,
-            nome: editora.nome,
-            cnpj: editora.cnpj,
-            endereco: editora.endereco,
-            telefone: editora.telefone,
-            email: editora.email
-        });
+        props.updateEditora(editora.id, editora);
         props.closeModal();
     }
 

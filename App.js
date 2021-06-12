@@ -18,6 +18,7 @@ import { DetailedCard } from './src/pages/paymentCards/detailedCard';
 import MyAccount from './Screens/MyAccount'
 import {UserContextComponent} from "./UserContext";
 import { PaymentCardProvider } from './src/context/PaymentCardsContext';
+import { EditoraProvider } from './src/context/PublishingCompanyContext';
 
 const Drawer = createDrawerNavigator();
 
@@ -25,21 +26,23 @@ export default function App() {
   return (
     <UserContextComponent>
       <PaymentCardProvider>
-        <NavigationContainer>
-          <Drawer.Navigator initialRouteName={'SignUp'}>
-            <Drawer.Screen name={'SignUp'} component={SignUp} options={{gestureEnabled:true}}/>
-            <Drawer.Screen name={'Login'} component={Login} options={{gestureEnabled:false}}/>
-            <Drawer.Screen name={'UploadBook'} component={UploadBook} options={{gestureEnabled:false}}/>
-            <Drawer.Screen name={'EditBook'} component={EditBook} options={{gestureEnabled:false}}/>
-            <Drawer.Screen name={'Editora'} component={Editora} />
-            <Drawer.Screen name={'Store'} component={Store}/>
-            <Drawer.Screen name={'DeleteAsync'} component={DeleteAsync}/>
-            <Drawer.Screen name={'CommentsScreen'} component={CommentsScreen}/>
-            <Drawer.Screen name={'PaymentCardList'} component={PaymentCards} />
-            <Drawer.Screen name={'DetailedCard'} component={DetailedCard} />
-            <Drawer.Screen name={'MyAccount'} component={MyAccount} options={{gestureEnabled:false}}/>
-          </Drawer.Navigator>
-        </NavigationContainer>
+        <EditoraProvider>
+          <NavigationContainer>
+            <Drawer.Navigator initialRouteName={'SignUp'}>
+              <Drawer.Screen name={'SignUp'} component={SignUp} options={{gestureEnabled:true}}/>
+              <Drawer.Screen name={'Login'} component={Login} options={{gestureEnabled:false}}/>
+              <Drawer.Screen name={'UploadBook'} component={UploadBook} options={{gestureEnabled:false}}/>
+              <Drawer.Screen name={'EditBook'} component={EditBook} options={{gestureEnabled:false}}/>
+              <Drawer.Screen name={'Editora'} component={Editora} />
+              <Drawer.Screen name={'Store'} component={Store}/>
+              <Drawer.Screen name={'DeleteAsync'} component={DeleteAsync}/>
+              <Drawer.Screen name={'CommentsScreen'} component={CommentsScreen}/>
+              <Drawer.Screen name={'PaymentCardList'} component={PaymentCards} />
+              <Drawer.Screen name={'DetailedCard'} component={DetailedCard} />
+              <Drawer.Screen name={'MyAccount'} component={MyAccount} options={{gestureEnabled:false}}/>
+            </Drawer.Navigator>
+          </NavigationContainer>
+        </EditoraProvider>
       </PaymentCardProvider>
     </UserContextComponent>
   );

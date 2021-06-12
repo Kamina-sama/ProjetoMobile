@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useContext} from 'react';
 
 import {
     Modal,
@@ -7,13 +7,16 @@ import {
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
+import { EditoraContext } from '../../src/context/PublishingCompanyContext';
 
 const DeleteEditora = (props) => {
 
-    const { isOpen, closeModal, selectedEditora } = props;
+    const { isOpen, closeModal } = props;
+    const [editora, setEditora] = useContext(EditoraContext);
+
 
     const deleteEditora = () => {
-      props.deleteEditora(props.selectedEditora.id);
+      props.deleteEditora(editora.id);
       props.closeModal();
     }
 
@@ -25,8 +28,8 @@ const DeleteEditora = (props) => {
             transparent
         >
             <View style={styles.BackgroundContainer}>
-                <View key={selectedEditora.cnpj} style={styles.container}>
-                    <Text style={styles.title}>Deseja excluir essa editora? ({selectedEditora.nome})?</Text>
+                <View key={editora.cnpj} style={styles.container}>
+                    <Text style={styles.title}>Deseja excluir essa editora? ({editora.nome})?</Text>
                     <Text style={styles.subTitle}>Se deseja excluir a editora aperte o botão OK.</Text>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity
